@@ -1,0 +1,46 @@
+project(arm_ecat)
+cmake_minimum_required(VERSION 2.8)
+
+
+##arm-linux
+## this is required
+set(CMAKE_SYSTEM_NAME Linux)
+
+# specify the cross compiler
+set(CMAKE_C_COMPILER   "/usr/bin/arm-linux-gnueabihf-gcc")
+set(CMAKE_CXX_COMPILER "/usr/bin/arm-linux-gnueabihf-g++")
+
+##set(CMAKE_C_COMPILER   "/home/z/work/arm/arm-2009q3/bin/arm-linux-gcc")
+##set(CMAKE_CXX_COMPILER "/home/z/work/arm/arm-2009q3/bin/arm-linux-g++")
+
+
+#SET(CMAKE_FIND_ROOT_PATH "编译器环境路径")
+set(CMAKE_FIND_ROOT_PATH "/usr/arm-linux-gnueabihf")
+#set(CMAKE_FIND_ROOT_PATH "/home/z/work/arm/arm-2009q3/arm-none-linux-gnueabi")
+
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+#linux
+#set(CMAKE_C_COMPILER "/usr/bin/gcc")
+#set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+
+#set(CMAKE_C_FLAGS " -pthread ")
+#set(CMAKE_CXX_FLAGS "-std=c++11 -pthread -static")
+set(CMAKE_CXX_FLAGS "-std=c++14 -pthread -static")
+
+
+#set(CMAKE_BUILD_TYPE "Debug")
+#set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
+
+#include_directories("${PROJECT_SOURCE_DIR}/src/etherlab")
+#include_directories("${PROJECT_SOURCE_DIR}/src/tinyxml2")
+include_directories("${PROJECT_SOURCE_DIR}/include")
+link_directories("${PROJECT_SOURCE_DIR}/lib")
+
+
+#add_subdirectory(src/socket)
+#add_subdirectory(src/tinyxml2)
+add_subdirectory(src/etherlab)
+add_subdirectory(src/test)
