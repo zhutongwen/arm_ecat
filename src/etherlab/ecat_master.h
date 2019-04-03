@@ -10,8 +10,8 @@
 
 #define PI  3.141592654
 
-#define IMU_Pos_0       0, 2
-#define IMU_Pos_1       0, 1
+//#define IMU_Pos_0       0, 2
+//#define IMU_Pos_1       0, 1
 #define WMIO_Pos_2      0, 0
 
 //#define IMU_Pos_1       0, 1

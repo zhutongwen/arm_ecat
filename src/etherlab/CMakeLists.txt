@@ -36,7 +36,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 
-target_link_libraries(arm_ecat            ${CMAKE_SOURCE_DIR}/lib/libethercat.a ${CMAKE_SOURCE_DIR}//src/glog/lib/libglog.a)
+target_link_libraries(arm_ecat            ${CMAKE_SOURCE_DIR}/lib/libethercat.a)
+#${CMAKE_SOURCE_DIR}/src/glog/lib/libglog.a)
 #target_link_libraries(master            native rtdm xenomai ethercat_rtdm)
 #target_link_libraries(lan9252_IO        native rtdm xenomai ethercat_rtdm)
 #target_link_libraries(etherlab          native rtdm xenomai ethercat_rtdm)

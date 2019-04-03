@@ -39,8 +39,6 @@ uint16_t max_time_us = 1000;
 uint16_t last_time_us = 0;
 static float x,y,z;
 
-
-
 static inline void tsnorm(struct timespec *ts)
 {
     while (ts->tv_nsec >= 1000000000)
@@ -124,14 +122,20 @@ void *thread_func(void *data)
     //        if(master_state.slaves_responding == static_cast<unsigned int>(1))
             if(master_state.al_states == 0x08)
             {
+                #ifdef IMU_Pos_0
                 slaves.imu_0.DataRead(domain1_pd);
+                #endif
+
+                #ifdef IMU_Pos_1
                 slaves.imu_1.DataRead(domain1_pd);
+                #endif
+
                 slaves.wmio_0.DataRead(domain1_pd);
             }
 
             //time test
             {
-                for(uint32_t i=0; i<200; i++)
+                for(uint32_t i=0; i<300; i++)
                 {
                     x = tan(i);
                     y = atan(i);
@@ -146,17 +150,20 @@ void *thread_func(void *data)
                     goto out_loop;
                 }
 
-                last_time_us = lasttime.tv_sec == 0? 1000:1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
-                min_time_us = min_time_us > last_time_us?   last_time_us:min_time_us;
-                max_time_us = max_time_us < last_time_us?   last_time_us:max_time_us;
-                lasttime = systime;
-
-
+                {
+                    static int i=0;
+                    if(i++ < 2000) last_time_us=1000;
+                    else last_time_us = 1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
+//                    last_time_us = lasttime.tv_sec == 0? 1000:1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
+                    min_time_us = min_time_us > last_time_us?   last_time_us:min_time_us;
+                    max_time_us = max_time_us < last_time_us?   last_time_us:max_time_us;
+                    lasttime = systime;
+                }
             }
             //distribute clock
-            ecrt_master_application_time(master, 1000000000*systime.tv_sec + systime.tv_nsec);
-            ecrt_master_sync_reference_clock(master);
-            ecrt_master_sync_slave_clocks(master);
+//            ecrt_master_application_time(master, 1000000000*systime.tv_sec + systime.tv_nsec);
+//            ecrt_master_sync_reference_clock(master);
+//            ecrt_master_sync_slave_clocks(master);
 
             // send process data
             ecrt_domain_queue(domain1);
@@ -306,6 +313,17 @@ int main(int argc, char* argv[])
 //                LOG(ERROR) << "Failed to get domain data pointer" << std::endl;
                 return -1;
             }
+
+            ec_master_info_t *master_info;
+            if(0 != ecrt_master(master, master_info))
+            {
+                std::cout<< "ecrt_master error!!!!!!!!!!!!!!!!!!!!!! " << std::endl;
+                return -1;
+            }
+            else
+            {
+                std::cout<< "slave_count" << master_info->slave_count << std::endl;
+            }
         }
 
         ret = pthread_detach(thread);
@@ -316,11 +334,17 @@ int main(int argc, char* argv[])
             sleep(1);
             std::cout<< "cycle times: " << loop_counter << "    last_time_us: " << last_time_us << "    min_time_us: " << min_time_us << "    max_time_us: " << max_time_us << std::endl;
             std::cout<< "z: " << z << std::endl << std::endl;
+
+            #ifdef IMU_Pos_0
             slaves.imu_0.DataPlay();
+            #endif
+
+            #ifdef IMU_Pos_1
             slaves.imu_1.DataPlay();
+            #endif
             slaves.wmio_0.DataPlay();
 
-            std::cout<< "number of domain_regs: " << slaves.imu_0.domain_regs.size() << std::endl << std::endl << std::endl;
+            std::cout<< "number of domain_regs: " << EcatSlave::domain_regs.size() << std::endl << std::endl << std::endl;
 
 
         }

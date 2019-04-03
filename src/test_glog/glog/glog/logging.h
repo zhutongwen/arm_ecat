@@ -650,7 +650,7 @@ void MakeCheckOpValueString(std::ostream* os, const unsigned char& v);
 // Build the error message string. Specify no inlining for code size.
 template <typename T1, typename T2>
 std::string* MakeCheckOpString(const T1& v1, const T2& v2, const char* exprtext)
-    __attribute__((noinline));
+    __attribute__ ((noinline));
 
 namespace base {
 namespace internal {
@@ -931,11 +931,16 @@ struct CompileAssert {
 struct CrashReason;
 
 // Returns true if FailureSignalHandler is installed.
-// Needs to be exported since it's used by the signalhandler_unittest.
-GOOGLE_GLOG_DLL_DECL bool IsFailureSignalHandlerInstalled();
+bool IsFailureSignalHandlerInstalled();
 }  // namespace glog_internal_namespace_
 
+#define GOOGLE_GLOG_COMPILE_ASSERT(expr, msg) \
+  typedef google::glog_internal_namespace_::CompileAssert<(bool(expr))> msg[bool(expr) ? 1 : -1]
+
 #define LOG_EVERY_N(severity, n)                                        \
+  GOOGLE_GLOG_COMPILE_ASSERT(google::GLOG_ ## severity < \
+                             google::NUM_SEVERITIES,     \
+                             INVALID_REQUESTED_LOG_SEVERITY);           \
   SOME_KIND_OF_LOG_EVERY_N(severity, (n), google::LogMessage::SendToLog)
 
 #define SYSLOG_EVERY_N(severity, n) \
@@ -1108,7 +1113,6 @@ class GOOGLE_GLOG_DLL_DECL LogStreamBuf : public std::streambuf {
   LogStreamBuf(char *buf, int len) {
     setp(buf, buf + len - 2);
   }
-
   // This effectively ignores overflow.
   virtual int_type overflow(int_type ch) {
     return ch;
@@ -1148,12 +1152,11 @@ public:
   // http://msdn.microsoft.com/en-us/library/3tdb471s(VS.80).aspx
   // Let's just ignore the warning.
 #ifdef _MSC_VER
-# pragma warning(push)
 # pragma warning(disable: 4275)
 #endif
   class GOOGLE_GLOG_DLL_DECL LogStream : public std::ostream {
 #ifdef _MSC_VER
-# pragma warning(pop)
+# pragma warning(default: 4275)
 #endif
   public:
     LogStream(char *buf, int len, int ctr)
@@ -1243,7 +1246,7 @@ public:
   void SendToSyslogAndLog();  // Actually dispatch to syslog and the logs
 
   // Call abort() or similar to perform LOG(FATAL) crash.
-  static void __attribute__((noreturn)) Fail();
+  static void __attribute__ ((noreturn)) Fail();
 
   std::ostream& stream();
 
@@ -1291,7 +1294,7 @@ class GOOGLE_GLOG_DLL_DECL LogMessageFatal : public LogMessage {
  public:
   LogMessageFatal(const char* file, int line);
   LogMessageFatal(const char* file, int line, const CheckOpString& result);
-  __attribute__((noreturn)) ~LogMessageFatal();
+  __attribute__ ((noreturn)) ~LogMessageFatal();
 };
 
 // A non-macro interface to the log facility; (useful
@@ -1625,7 +1628,7 @@ class GOOGLE_GLOG_DLL_DECL NullStreamFatal : public NullStream {
   NullStreamFatal() { }
   NullStreamFatal(const char* file, int line, const CheckOpString& result) :
       NullStream(file, line, result) { }
-  __attribute__((noreturn)) ~NullStreamFatal() throw () { _exit(1); }
+  __attribute__ ((noreturn)) ~NullStreamFatal() throw () { _exit(1); }
 };
 
 // Install a signal handler that will dump signal information and a stack

@@ -22,14 +22,14 @@ int EcatImu::Init   (ec_master_t    *master_,
 {
     ec_slave_config_t *sc_imu;
     sc_imu = ecrt_master_slave_config(master_, alias_, position_, IMU);
-    if(!sc_imu)
+    if(NULL == sc_imu)
     {
-        fprintf(stderr, "Failed to get slave configuration.\n");
+        std::cout << "Failed to get slave configuration!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
         return -1;
     }
-    if (ecrt_slave_config_pdos(sc_imu, EC_END, syncs))
+    if (0 != ecrt_slave_config_pdos(sc_imu, EC_END, syncs))
     {
-        fprintf(stderr, "Failed to configure PDOs.\n");
+        std::cout << "Failed to configure PDOs!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
         return -1;
     }
 
