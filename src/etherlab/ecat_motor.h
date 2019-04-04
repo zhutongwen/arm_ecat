@@ -1,11 +1,12 @@
 #ifndef ECAT_MOTOR_H_
 #define ECAT_MOTOR_H_
 
-#include <iostream>
-#include "ecrt.h"
+#include  <iostream>
+#include  "ecrt.h"
+#include  "ecat_slave.h"
 
 
-class EcatMotor
+class EcatMotor: public EcatSlave
 {
 public:
     //mode: 0x01 position mode
@@ -65,7 +66,6 @@ public:
     offset_t            offset;
     data_t              data;
 
-
     // motor pdo
     /*******************************************************************************/
     //RxPdo
@@ -117,29 +117,23 @@ public:
     EcatMotor();
     ~EcatMotor();
 
-    int Display(uint8_t *domain1_pd_);
+    int DataRead(uint8_t *domain1_pd_);
+    int Display(void);
     int Init(ec_master_t *master_,
              uint16_t alias_, /**< Slave alias. */
              uint16_t position_/**< Slave position. */);
     int Enable(uint8_t *domain1_pd_);
     int Homing(uint8_t *domain1_pd_);
-    int SetMode(uint8_t *domain1_pd_, int8_t mode_);
+    int SetMode(uint8_t *domain1_pd_, mode_t mode_);
     int SetTargtVelocity(uint8_t *domain1_pd_, int32_t velocity_);
-
-
-
-
 
     uint8_t GetMode();
     int32_t GetActualPosition();
     int32_t GetActualVelocity();
     int16_t GetActualCurrent();
 
-
     int SetTargtPosition(int32_t position);
     int SetTargtTorque(int16_t torque);
-
-
 
     enum
     {

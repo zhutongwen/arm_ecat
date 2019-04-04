@@ -42,37 +42,25 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <libgen.h>
 
 #define BUFFER_SIZE 512
-
+#define RT_PRINT(x) {   struct message msg; \
+                        msg.msg_type = getpid(); \
+                        msg.msg_text = basename((char*)__FILE__) + space + std::to_string(__LINE__) + ": " + x; \
+                        msgsnd(qid, &msg, msg.msg_text.length(), 0);}
 
 int qid;
+std::string space("  ");
 
 struct message
 {
     long msg_type;
-//    char msg_text[BUFFER_SIZE];
     std::string msg_text;
 };
-
-
-void *MsgsndThread(void *data)
-{
-    struct message msg;
-    while(1)
-    {
-        msg.msg_text= __FILE__;
-        msg.msg_type = getpid();
-        /*添加消息到消息队列*/
-        if ((msgsnd(qid, &msg, msg.msg_text.length(), 0)) < 0)
-        {
-            perror("message posted");
-            exit(1);
-        }
-        sleep(1);
-    }
-    exit(0);
-}
 
 
 void *MsgrcvThread(void *data)
@@ -80,15 +68,13 @@ void *MsgrcvThread(void *data)
     struct message msg;
     do
     {
-        /*读取消息队列*/
-//        memset(msg.msg_text.c_, 0, BUFFER_SIZE);
-        msg.msg_text.clear();
         if (msgrcv(qid, (void*)&msg, BUFFER_SIZE, 0, 0) < 0)
         {
             perror("msgrcv");
             exit(1);
         }
-        std::cout << "The message from process: " << msg.msg_type << msg.msg_text << std::endl;
+        std::cout << msg.msg_text << std::endl;
+        msg.msg_text.clear();
     } while(strncmp(msg.msg_text.data(), "quit", 4));
     /*从系统内核中移走消息队列 */
     if ((msgctl(qid, IPC_RMID, NULL)) < 0)
@@ -106,6 +92,8 @@ int main(int argc, char* argv[])
         pthread_attr_t attr;
         pthread_t thread;
         int ret;
+
+        chdir(dirname(argv[0])); //设置当前目录为应用程序所在的目录。
 
 
         /*创建消息队列*/
@@ -155,15 +143,15 @@ int main(int argc, char* argv[])
                 goto out;
         }
 
-        /* Create a pthread with specified attributes */
-        ret = pthread_create(&thread, &attr, MsgsndThread, NULL);
-        if (ret) {
-                printf("create pthread failed\n");
-                goto out;
-        }
+//        /* Create a pthread with specified attributes */
+//        ret = pthread_create(&thread, &attr, MsgsndThread, NULL);
+//        if (ret) {
+//                printf("create pthread failed\n");
+//                goto out;
+//        }
 
-        ret = pthread_detach(thread);
-        if (ret)    printf("join pthread failed: %m\n");
+//        ret = pthread_detach(thread);
+//        if (ret)    printf("join pthread failed: %m\n");
 
 
         /* Create a pthread with specified attributes */
@@ -178,6 +166,7 @@ int main(int argc, char* argv[])
 
         while (1)
         {
+            RT_PRINT("I am RT print hahahahaha");
             sleep(1);
 //            std::cout<< "cycle times: " << std::endl;
 

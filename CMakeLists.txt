@@ -37,7 +37,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -pthread -static")
 #include_directories("${PROJECT_SOURCE_DIR}/src/etherlab")
 #include_directories("${PROJECT_SOURCE_DIR}/src/tinyxml2")
 #include_directories("${PROJECT_SOURCE_DIR}/include")
-link_directories("${PROJECT_SOURCE_DIR}/lib")
+#link_directories("${PROJECT_SOURCE_DIR}/lib")
 
 add_subdirectory(src/etherlab)
 add_subdirectory(src/test_vector)

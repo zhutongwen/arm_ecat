@@ -6,16 +6,20 @@
 
 #include "ecat_imu.h"
 #include "ecat_wmio.h"
+#include "ecat_motor.h"
 
 
 #define PI  3.141592654
 
-//#define IMU_Pos_0       0, 2
-//#define IMU_Pos_1       0, 1
-#define WMIO_Pos_2      0, 0
 
 //#define IMU_Pos_1       0, 1
-//#define MOTOR_Pos_0     0, 0
+
+
+//#define IMU_Pos_1       0, 1
+
+#define WMIO_Pos_0      0, 0
+#define IMU_Pos_0       0, 1
+#define MOTOR_Pos_0     0, 2
 
 typedef struct
 {
@@ -28,7 +32,7 @@ typedef struct
     EcatImu imu_1;
 #endif
 
-#ifdef WMIO_Pos_2
+#ifdef WMIO_Pos_0
     EcatWmio wmio_0;
 #endif
 

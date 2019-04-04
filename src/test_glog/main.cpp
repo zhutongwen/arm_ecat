@@ -11,6 +11,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
+#include <sys/mman.h>
+
 #define BUFFER_SIZE 512
 
 struct message
@@ -59,97 +61,25 @@ void GlogInit(char **argv)
          LOG(WARNING) <<"warning!!!!!!!!!"<<std::endl;
          LOG(ERROR) <<"error!!!!!!!!!!!!!"<<std::endl;
      }
-
-}
-void MsgsndThread(void)
-{
-    {
-//        int qid;
-//        key_t key;
-//        struct message msg;
-//        /*根据不同的路径和关键字产生标准的 key*/
-//        if ((key = ftok(".", 'a')) == -1)
-//        {
-//            perror("ftok");
-//            exit(1);
-//        }
-//        /*创建消息队列*/
-//        if ((qid = msgget(key, IPC_CREAT|0666)) == -1)
-//        {
-//            perror("msgget");
-//            exit(1);
-//        }
-//        printf("Open queue %d\n",qid);
-//        while(1)
-//        {
-//            printf("Enter some message to the queue:");
-//            if ((fgets(msg.msg_text, BUFFER_SIZE, stdin)) == NULL)
-//            {
-//                puts("no message");
-//                exit(1);
-//            }
-//            msg.msg_type = getpid();
-//            /*添加消息到消息队列*/
-//            if ((msgsnd(qid, &msg, strlen(msg.msg_text), 0)) < 0)
-//            {
-//                perror("message posted");
-//                exit(1);
-//            }
-//            if (strncmp(msg.msg_text, "quit", 4) == 0)
-//            {
-//                break;
-//            }
-//        }
-//        exit(0);
-    }
 }
 
-void MsgrcvThread(void)
-{
-    {
-//        int qid;
-//        key_t key;
-//        struct message msg;
-
-        /*根据不同的路径和关键字产生标准的 key*/
-//        if ((key = ftok(".", 'a')) == -1)
-//        {
-//            perror("ftok");
-//            exit(1);
-//        }
-//        /*创建消息队列*/
-//        if ((qid = msgget(key, IPC_CREAT|0666)) == -1)
-//        {
-//            perror("msgget");
-//            exit(1);
-//        }
-//        printf("Open queue %d\n", qid);
-//        do
-//        {
-//            /*读取消息队列*/
-//            memset(msg.msg_text, 0, BUFFER_SIZE);
-//            if (msgrcv(qid, (void*)&msg, BUFFER_SIZE, 0, 0) < 0)
-//            {
-//                perror("msgrcv");
-//                exit(1);
-//            }
-////            printf("The message from process %d : %s", msg.msg_type, msg.msg_text);
-//            std::cout << "The message from process" << msg.msg_type << msg.msg_text << std::endl;
-//        } while(strncmp(msg.msg_text, "quit", 4));
-//        /*从系统内核中移走消息队列 */
-//        if ((msgctl(qid, IPC_RMID, NULL)) < 0)
-//        {
-//            perror("msgctl");
-//            exit(1);
-//        }
-//        exit(0);
-    }
-}
 
 
 int main(int argc, char* argv[])
 {
-//    GlogInit(argv);
+    GlogInit(argv);
+
+    if(mlockall(MCL_CURRENT|MCL_FUTURE) == -1) {
+            printf("mlockall failed: %m\n");
+            exit(-2);
+    }
+
+    while(1)
+    {
+        LOG(INFO) <<"glog start"<<std::endl;
+        LOG(WARNING) <<"warning!!!!!!!!!"<<std::endl;
+        LOG(ERROR) <<"error!!!!!!!!!!!!!"<<std::endl;
+    }
 
 //    std::fstream examplefile;
 //    examplefile.open("example.txt");
@@ -165,20 +95,6 @@ int main(int argc, char* argv[])
 //    {
 //        LOG(ERROR) << "record error!\n";
 //    }
-
-
-    std::thread msgsnd(MsgsndThread);
-    msgsnd.detach();
-
-//    std::thread msgrcv(MsgrcvThread);
-//    msgrcv.detach();
-
-    while(1)
-    {
-        std::cout <<"123456" << std::endl;
-        sleep(1);
-
-    }
 
     return 0;
 }
@@ -196,8 +112,7 @@ int main(int argc, char* argv[])
 //  sprintf(func,__FUNCTION__);//函数名
 //  printf("file=%s\n",__FILE__);
 //  printf("func=%s\n",func);
-//  printf("%05d\n",__LINE__);//行号
+//  printf("line = %d\n",__LINE__);//行号
 //    std::cout << __FILE__ << std::endl;
-//    std::cout<< "clock_gettime error !!!" <<std::endl;
 //  return 0;
 //}

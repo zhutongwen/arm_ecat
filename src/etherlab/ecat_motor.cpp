@@ -38,14 +38,14 @@ EcatMotor::~EcatMotor()
 
 }
 
-int EcatMotor::Display(uint8_t *domain1_pd_)
+int EcatMotor::Display(void)
 {
-    data.actual_pos = EC_READ_S32(domain1_pd_ + offset.actual_pos);
-    data.actual_vel = EC_READ_S32(domain1_pd_ + offset.actual_vel);
-    data.actual_cur = EC_READ_S16(domain1_pd_ + offset.actual_cur);
-    data.actual_tor = EC_READ_S16(domain1_pd_ + offset.actual_tor);
-    data.status_word = EC_READ_U16(domain1_pd_ + offset.status_word);
-    data.mode_display = EC_READ_U8(domain1_pd_ + offset.mode_display);
+//    data.actual_pos = EC_READ_S32(domain1_pd_ + offset.actual_pos);
+//    data.actual_vel = EC_READ_S32(domain1_pd_ + offset.actual_vel);
+//    data.actual_cur = EC_READ_S16(domain1_pd_ + offset.actual_cur);
+//    data.actual_tor = EC_READ_S16(domain1_pd_ + offset.actual_tor);
+//    data.status_word = EC_READ_U16(domain1_pd_ + offset.status_word);
+//    data.mode_display = EC_READ_U8(domain1_pd_ + offset.mode_display);
 
 
     std::cout << "actual_pos:" << std::dec << data.actual_pos << std::endl;
@@ -71,7 +71,6 @@ int EcatMotor::Init(ec_master_t *master_,
         return -1;
     }
     if (ecrt_slave_config_pdos(sc_motor, EC_END, syncs))
-//        if (ecrt_slave_config_pdos(sc_motor_01, EC_END, xml_motor_syncs.data()))
     {
         fprintf(stderr, "Failed to configure PDOs.\n");
         return -1;
@@ -142,6 +141,25 @@ int EcatMotor::Init(ec_master_t *master_,
     #endif
 
     ecrt_slave_config_dc(sc_motor,0x0300, 1000000, 440000, 0, 0);////////////////////////////////////////////////////
+
+
+    EcatSlave::domain_regs.pop_back(); //删除a向量的最后一个元素
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x607a, 0x00, &offset.target_pos, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x60ff, 0x00, &offset.target_vel, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6071, 0x00, &offset.target_tor, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6072, 0x00, &offset.max_tor, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6040, 0x00, &offset.control_word, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6060, 0x00, &offset.mode, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x60b1, 0x00, &offset.vel_offset, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x60b2, 0x00, &offset.tor_offset, NULL});
+
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6064, 0x00, &offset.actual_pos, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x606c, 0x00, &offset.actual_vel, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6078, 0x00, &offset.actual_cur, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6077, 0x00, &offset.actual_tor, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6041, 0x00, &offset.status_word, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6061, 0x00, &offset.mode_display, NULL});
+    EcatSlave::domain_regs.push_back({});
 
     return 0;
 }
@@ -259,7 +277,7 @@ int EcatMotor::Homing(uint8_t *domain1_pd_)
     }
 }
 
-int EcatMotor::SetMode(uint8_t *domain1_pd_, int8_t mode_)
+int EcatMotor::DataRead(uint8_t *domain1_pd_)
 {
     data.actual_pos = EC_READ_S32(domain1_pd_ + offset.actual_pos);
     data.actual_vel = EC_READ_S32(domain1_pd_ + offset.actual_vel);
@@ -267,8 +285,10 @@ int EcatMotor::SetMode(uint8_t *domain1_pd_, int8_t mode_)
     data.actual_tor = EC_READ_S16(domain1_pd_ + offset.actual_tor);
     data.status_word = EC_READ_U16(domain1_pd_ + offset.status_word);
     data.mode_display = EC_READ_U8(domain1_pd_ + offset.mode_display);
+}
 
-
+int EcatMotor::SetMode(uint8_t *domain1_pd_, mode_t mode_)
+{
     int motor_status = data.status_word & 0x006f;
     if(motor_status != 0x0027)
     {
