@@ -1,35 +1,7 @@
 #include "ecat_motor.h"
 EcatMotor::EcatMotor()
 {
-//    motor_state = INIT;
-//    if((mode == 0x01)   //positon
-//       || (mode == 0x03) //velocity
-//       || (mode == 0x04))//torque
-//    {
-//        EC_WRITE_U8(domain1_pd + off_motor_mode, mode);//homing mode
-//    }
 
-//    //motor enable
-//    do
-//    {
-//        if(motor_data.status_word & 0x0040)// switch on disable
-//        {
-//            EC_WRITE_U16(domain1_pd + off_motor_control_word, 0x0006); //shut down
-//        }
-//        else if ((motor_data.status_word & 0x006f) == 0x0021) //read to switch on
-//        {
-//            EC_WRITE_U16(domain1_pd + off_motor_control_word, 0x0007); //switch on
-//        }
-//        else if ((motor_data.status_word & 0x006f) == 0x0023) //switch on
-//        {
-//            EC_WRITE_U16(domain1_pd + off_motor_control_word, 0x000f); //Enable Operation
-//        }
-//        else if ((motor_data.status_word & 0x004f) == 0x0008) //falt
-//        {
-//            EC_WRITE_U16(domain1_pd + off_motor_control_word, 0x0080); //falt restet
-//        }
-//    }
-//    while()
 
 }
 
@@ -40,21 +12,12 @@ EcatMotor::~EcatMotor()
 
 int EcatMotor::Display(void)
 {
-//    data.actual_pos = EC_READ_S32(domain1_pd_ + offset.actual_pos);
-//    data.actual_vel = EC_READ_S32(domain1_pd_ + offset.actual_vel);
-//    data.actual_cur = EC_READ_S16(domain1_pd_ + offset.actual_cur);
-//    data.actual_tor = EC_READ_S16(domain1_pd_ + offset.actual_tor);
-//    data.status_word = EC_READ_U16(domain1_pd_ + offset.status_word);
-//    data.mode_display = EC_READ_U8(domain1_pd_ + offset.mode_display);
-
-
     std::cout << "actual_pos:" << std::dec << data.actual_pos << std::endl;
     std::cout << "actual_vel:" << std::dec << data.actual_vel << std::endl;
     std::cout << "actual_cur:" << std::dec << data.actual_cur << std::endl;
     std::cout << "actual_tor:" << std::dec << data.actual_tor << std::endl;
     std::cout << "status_word: 0x" << std::hex << data.status_word << std::endl;
     std::cout << "mode_display: 0x" << std::hex << (uint16_t)data.mode_display << std::endl;
-    std::cout << std::endl;
     return 0;
 }
 
@@ -63,7 +26,6 @@ int EcatMotor::Init(ec_master_t *master_,
                     uint16_t position_ /**< Slave position. */
                     )
 {
-    ec_slave_config_t   *sc_motor;
     sc_motor = ecrt_master_slave_config(master_, alias_, position_, ELMO);
     if(!sc_motor)
     {
@@ -76,6 +38,7 @@ int EcatMotor::Init(ec_master_t *master_,
         return -1;
     }
 
+//
 
     //homing config
     {
@@ -140,8 +103,6 @@ int EcatMotor::Init(ec_master_t *master_,
     }
     #endif
 
-    ecrt_slave_config_dc(sc_motor,0x0300, 1000000, 440000, 0, 0);////////////////////////////////////////////////////
-
 
     EcatSlave::domain_regs.pop_back(); //删除a向量的最后一个元素
     EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x607a, 0x00, &offset.target_pos, NULL});
@@ -160,6 +121,8 @@ int EcatMotor::Init(ec_master_t *master_,
     EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6041, 0x00, &offset.status_word, NULL});
     EcatSlave::domain_regs.push_back({alias_, position_, ELMO, 0x6061, 0x00, &offset.mode_display, NULL});
     EcatSlave::domain_regs.push_back({});
+
+//    ecrt_slave_config_dc(sc_motor, 0x0300, 1000000, 440000, 0, 0);
 
     return 0;
 }
@@ -225,7 +188,6 @@ int EcatMotor::Enable(uint8_t *domain1_pd_)
             }
         }
     }
-
     return 0;
 }
 

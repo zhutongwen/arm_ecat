@@ -19,9 +19,12 @@ int EcatWmio::Init   (ec_master_t    *master_,
         return -1;
     }
 
+//    ecrt_slave_config_dc(sc_imu, 0x0300, 1000000, 440000, 0, 0);
+
     EcatSlave::domain_regs.pop_back(); //删除a向量的最后一个元素
-    EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x6000, 0x01, &offset.keys, NULL});
+
     EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x6020, 0x01, &offset.analog_data, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x6000, 0x01, &offset.keys, NULL});
     EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x7000, 0x01, &offset.leds, NULL});
     EcatSlave::domain_regs.push_back({});
 
@@ -38,5 +41,5 @@ void EcatWmio::DataRead(uint8_t *domain1_pd_)
 void EcatWmio::DataPlay(void)
 {
     std::cout << "keys: " << (uint16_t)data.key0_1 << std::endl;
-    std::cout << "analog_data: " << data.analog_data << std::endl;
+    std::cout << "analog_data: " << std::dec << data.analog_data << std::endl;
 }

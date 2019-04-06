@@ -61,12 +61,14 @@ void rt_check_domain_state(void)
 
     if (ds.working_counter != domain1_state.working_counter)
     {
-        printf("Domain1: WC %u.\n", ds.working_counter);
+//        printf("Domain1: WC %u.\n", ds.working_counter);
+        RT_PRINT("Domain1: WC" + std::to_string(ds.working_counter));
     }
 
     if (ds.wc_state != domain1_state.wc_state)
     {
-        printf("Domain1: State %u.\n", ds.wc_state);
+//        printf("Domain1: State %u.\n", ds.wc_state);
+        RT_PRINT("Domain1: State " + std::to_string(ds.wc_state));
     }
 
     domain1_state = ds;
@@ -81,7 +83,8 @@ void rt_check_master_state(void)
 
     if (ms.slaves_responding != master_state.slaves_responding)
     {
-        printf("%u slave(s).\n", ms.slaves_responding);
+//        printf("%u slave(s).\n", ms.slaves_responding);
+        RT_PRINT(std::to_string(ms.slaves_responding) + " slave(s).");
     }
 
     if (ms.al_states != master_state.al_states)
@@ -92,7 +95,8 @@ void rt_check_master_state(void)
 
     if (ms.link_up != master_state.link_up)
     {
-        printf("Link is %s.\n", ms.link_up ? "up" : "down");
+//        printf("Link is %s.\n", ms.link_up ? "up" : "down");
+//        RT_PRINT("AL states: " + std::to_string(ms.al_states));
     }
 
     master_state = ms;
@@ -104,6 +108,8 @@ void *thread_func(void *data)
     struct timespec systime;
     struct timespec lasttime = {0, 0};
     struct timespec looptime;
+    sleep(1);
+
     if (clock_gettime(CLOCK_REALTIME, &looptime) == -1)
     {
         std::cout<< "clock_gettime error !!!" <<std::endl;
@@ -137,19 +143,19 @@ void *thread_func(void *data)
                 #endif
 
                 #ifdef  WMIO_Pos_0
+                static uint8_t leds=0x55;
                 slaves.wmio_0.DataRead(domain1_pd);
+                EC_WRITE_U8(domain1_pd+slaves.wmio_0.data.led0_7, leds++);
                 #endif
 
-//                #ifdef MOTOR_Pos_0
-//                slaves.motor_0.DataRead(domain1_pd);
-//                #endif
-
-//                ControlTask(domain1_pd, slaves);
+                #ifdef MOTOR_Pos_0
+                    ControlTask(domain1_pd, slaves);
+                #endif
             }
 
             //time test
             {
-//                for(uint32_t i=0; i<300; i++)
+//                for(uint32_t i=0; i<100; i++)
 //                {
 //                    x = tan(i);
 //                    y = atan(i);
@@ -168,16 +174,14 @@ void *thread_func(void *data)
                     static int i=0;
                     if(i++ < 2000) last_time_us=1000;
                     else last_time_us = 1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
-//                    last_time_us = lasttime.tv_sec == 0? 1000:1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
                     min_time_us = min_time_us > last_time_us?   last_time_us:min_time_us;
                     max_time_us = max_time_us < last_time_us?   last_time_us:max_time_us;
                     lasttime = systime;
                 }
-
-
             }
             //distribute clock
-            ecrt_master_application_time(master, 1000000000*systime.tv_sec + systime.tv_nsec);
+            ecrt_master_application_time(master, 1000000000*((uint64_t)systime.tv_sec) + systime.tv_nsec);
+//            ecrt_master_application_time(master, systime.tv_nsec);
             ecrt_master_sync_reference_clock(master);
             ecrt_master_sync_slave_clocks(master);
 
@@ -220,13 +224,15 @@ int EcatMasterInit(void)
         slaves.imu_1.Init(master,IMU_Pos_1);
     #endif
 
+    #ifdef MOTOR_Pos_0
+        slaves.motor_0.Init(master, MOTOR_Pos_0);
+    #endif
+
     #ifdef WMIO_Pos_0
         slaves.wmio_0.Init(master, WMIO_Pos_0);
     #endif
 
-    #ifdef MOTOR_Pos_0
-        slaves.motor_0.Init(master, MOTOR_Pos_0);
-    #endif
+
 
 //            if (ecrt_domain_reg_pdo_entry_list(domain1, domain1_regs))
 
@@ -236,6 +242,9 @@ int EcatMasterInit(void)
 //                LOG(ERROR) << "PDO entry registration failed!" << std::endl;
         return -1;
     }
+
+
+    ecrt_slave_config_dc(slaves.motor_0.sc_motor, 0x0300, 1000000, 440000, 0, 0);
 
 //            LOG(INFO) <<"Activating master..."<<std::endl;
     if (ecrt_master_activate(master))
@@ -278,6 +287,9 @@ int main(int argc, char* argv[])
             exit(-2);
     }
 
+
+    EcatMasterInit();
+
     /* Initialize pthread attributes (default values) */
     ret = pthread_attr_init(&attr);
     if (ret) {
@@ -310,6 +322,8 @@ int main(int argc, char* argv[])
             printf("pthread setinheritsched failed\n");
             goto out;
     }
+
+
 
     /* Create a pthread with specified attributes */
     ret = pthread_create(&thread, &attr, thread_func, NULL);
@@ -347,13 +361,16 @@ int main(int argc, char* argv[])
 
     }
 
-    EcatMasterInit();
+
 
 
     while (1)
     {
         sleep(1);
-        std::cout<< "cycle times: " << loop_counter << "    last_time_us: " << last_time_us << "    min_time_us: " << min_time_us << "    max_time_us: " << max_time_us << std::endl;
+        std::cout<< "cycle times: " << std::dec << loop_counter \
+                 << "    last_time_us: " << std::dec << last_time_us\
+                 << "    min_time_us: " << std::dec << min_time_us \
+                 << "    max_time_us: " << std::dec << max_time_us << std::endl;
         std::cout<< "z: " << z << std::endl;
 
         #ifdef IMU_Pos_0
@@ -373,8 +390,6 @@ int main(int argc, char* argv[])
         #endif
 
         RT_PRINT("I am RT print hahahahaha");
-        int x=521;
-        RT_PRINT(std::to_string(x));
 
         std::cout<< std::endl;
     }

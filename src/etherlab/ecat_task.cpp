@@ -9,7 +9,7 @@ void ControlTask(uint8_t *domain1_pd_, slaves_t &slaves_)
     // motor
     #ifdef MOTOR_Pos_0
     {
-        std::cout << slaves_.motor_0.motor_state << std::endl;
+//        std::cout << slaves_.motor_0.motor_state << std::endl;
         slaves_.motor_0.DataRead(domain1_pd_);
 
         if(slaves_.motor_0.motor_state == slaves_.motor_0.STATE_CSV)
@@ -20,7 +20,7 @@ void ControlTask(uint8_t *domain1_pd_, slaves_t &slaves_)
             f32angle += 0.0002;
             if(f32angle >= 1) f32angle = 0;
 
-            s32velocity = 655350.0*sin(f32angle*(2.0*PI));
+            s32velocity = 3.0*65535.0*sin(f32angle*(2.0*PI));
             slaves_.motor_0.SetTargtVelocity(domain1_pd_, static_cast<int32_t>(s32velocity));
         }
 

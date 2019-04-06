@@ -65,6 +65,7 @@ public:
 
     offset_t            offset;
     data_t              data;
+    ec_slave_config_t   *sc_motor;
 
     // motor pdo
     /*******************************************************************************/
@@ -77,7 +78,6 @@ public:
         {0x6072, 0x00, 16}, //tor_max_value     s16
         {0x6040, 0x00, 16}, //control_word      u16
         {0x6060, 0x00, 8},  //module            u8
-
         {0x60b1, 0x00, 32}, //velocity offset   s32
         {0x60b2, 0x00, 16}, //torque_offset     s16
     };
@@ -94,7 +94,6 @@ public:
         {0x606c, 0x00, 32}, //vel_actual_value  s32
         {0x6078, 0x00, 16}, //cur_actual_value  s16
         {0x6077, 0x00, 16}, //tor_actual_value  s16
-
         {0x6041, 0x00, 16}, //status_word       u16
         {0x6061, 0x00, 8},  //mode_display    u8
     };
@@ -104,7 +103,6 @@ public:
         {0x1a11, 1, motor_txpdo_entries + 1}, //vel_actual_value  s32
         {0x1a1f, 1, motor_txpdo_entries + 2}, //cur_actual_value  s16
         {0x1a13, 1, motor_txpdo_entries + 3}, //tor_actual_value  s16
-
         {0x1a0a, 1, motor_txpdo_entries + 4}, //status_word       u16
         {0x1a0b, 1, motor_txpdo_entries + 5}, //module_display    u8
     };

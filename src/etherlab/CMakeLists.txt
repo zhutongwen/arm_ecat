@@ -3,6 +3,7 @@ aux_source_directory(. SRC_LIST) #find all source files and save in list of a va
 
 INCLUDE_DIRECTORIES("../")
 INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/include/")
+
 #add_executable(master
 #                        ecat_master.cpp
 #                        ecat_imu.cpp
