@@ -25,7 +25,11 @@ int EcatWmio::Init   (ec_master_t    *master_,
 
     EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x6020, 0x01, &offset.analog_data, NULL});
     EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x6000, 0x01, &offset.keys, NULL});
+
     EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x7000, 0x01, &offset.leds, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0, 0, &offset.null, NULL});
+
+
     EcatSlave::domain_regs.push_back({});
 
     return 0;

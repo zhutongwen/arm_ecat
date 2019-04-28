@@ -20,11 +20,11 @@ void ControlTask(uint8_t *domain1_pd_, slaves_t &slaves_)
             f32angle += 0.0002;
             if(f32angle >= 1) f32angle = 0;
 
-            s32velocity = 3.0*65535.0*sin(f32angle*(2.0*PI));
+            s32velocity = 5.0*65535.0*sin(f32angle*(2.0*PI));
             slaves_.motor_0.SetTargtVelocity(domain1_pd_, static_cast<int32_t>(s32velocity));
         }
 
-        if(slaves_.motor_0.motor_state == slaves_.motor_0.STATE_INIT)
+        else if(slaves_.motor_0.motor_state == slaves_.motor_0.STATE_INIT)
         {
             slaves_.motor_0.Enable(domain1_pd_);
         }

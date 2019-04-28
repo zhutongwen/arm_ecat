@@ -1,4 +1,5 @@
 #include "ecat_imu.h"
+#include "rt_log.h"
 
 EcatImu::EcatImu()
 {
@@ -67,8 +68,13 @@ void EcatImu::DataPlay(void)
 //    std::cout << "gx:" << data.gx << std::endl;
 //    std::cout << "gy:" << data.gy << std::endl;
 //    std::cout << "gz:" << data.gz << std::endl;
-    std::cout << "ax:" << data.ax << std::endl;
-    std::cout << "ay:" << data.ay << std::endl;
-    std::cout << "az:" << data.az << std::endl;
-    std::cout << "counter:" << std::dec << data.counter << std::endl << std::endl;
+//    std::cout << "ax:" << data.ax << std::endl;
+//    std::cout << "ay:" << data.ay << std::endl;
+//    std::cout << "az:" << data.az << std::endl;
+//    std::cout << "counter:" << std::dec << data.counter << std::endl << std::endl;
+
+    RT_PRINT("gx: " + std::to_string(data.ax));
+    RT_PRINT("gy: " + std::to_string(data.ay));
+    RT_PRINT("gz: " + std::to_string(data.az));
+    RT_PRINT("counter: " + std::to_string(data.counter));
 }

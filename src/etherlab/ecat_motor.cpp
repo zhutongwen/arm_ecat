@@ -1,4 +1,5 @@
 #include "ecat_motor.h"
+#include "rt_log.h"
 EcatMotor::EcatMotor()
 {
 
@@ -12,12 +13,21 @@ EcatMotor::~EcatMotor()
 
 int EcatMotor::Display(void)
 {
-    std::cout << "actual_pos:" << std::dec << data.actual_pos << std::endl;
-    std::cout << "actual_vel:" << std::dec << data.actual_vel << std::endl;
-    std::cout << "actual_cur:" << std::dec << data.actual_cur << std::endl;
-    std::cout << "actual_tor:" << std::dec << data.actual_tor << std::endl;
-    std::cout << "status_word: 0x" << std::hex << data.status_word << std::endl;
-    std::cout << "mode_display: 0x" << std::hex << (uint16_t)data.mode_display << std::endl;
+//    std::cout << "actual_pos:" << std::dec << data.actual_pos << std::endl;
+//    std::cout << "actual_vel:" << std::dec << data.actual_vel << std::endl;
+//    std::cout << "actual_cur:" << std::dec << data.actual_cur << std::endl;
+//    std::cout << "actual_tor:" << std::dec << data.actual_tor << std::endl;
+//    std::cout << "status_word: 0x" << std::hex << data.status_word << std::endl;
+//    std::cout << "mode_display: 0x" << std::hex << (uint16_t)data.mode_display << std::endl;
+
+
+    RT_PRINT("actual_pos: " + std::to_string(data.actual_pos));
+    RT_PRINT("actual_vel: " + std::to_string(data.actual_vel));
+    RT_PRINT("actual_cur: " + std::to_string(data.actual_cur));
+    RT_PRINT("actual_tor: " + std::to_string(data.actual_tor));
+    RT_PRINT("status_word: " + std::to_string(data.status_word));
+    RT_PRINT("mode_display: " + std::to_string(data.mode_display));
+
     return 0;
 }
 
@@ -141,7 +151,7 @@ int EcatMotor::Enable(uint8_t *domain1_pd_)
 
     if(data.mode_display != 0x06)
     {
-        std::cout << "--------mode_display--------" << std::endl;
+//        std::cout << "--------mode_display--------" << std::endl;
         EC_WRITE_S8(domain1_pd_ + offset.mode, static_cast<int8_t>(6));//homing  mode
     }
     else
@@ -150,17 +160,17 @@ int EcatMotor::Enable(uint8_t *domain1_pd_)
         if(motor_status == 0x0040 || motor_status == 0x0600)// switch on disable
         {
             EC_WRITE_U16(domain1_pd_ + offset.control_word, 0x0006); //shut down
-            std::cout << "--------shut down--------" << std::endl;
+//            std::cout << "--------shut down--------" << std::endl;
         }
         else if (motor_status == 0x0021) //read to switch on
         {
             EC_WRITE_U16(domain1_pd_ + offset.control_word, 0x0007); //switch on
-            std::cout << "-------switch on---------" << std::endl;
+//            std::cout << "-------switch on---------" << std::endl;
         }
         else if (motor_status == 0x0023) //switch on
         {
             EC_WRITE_U16(domain1_pd_ + offset.control_word, 0x000f); //Enable Operation
-            std::cout << "-------Enable Operation---------" << std::endl;
+//            std::cout << "-------Enable Operation---------" << std::endl;
         }
         else if(motor_status == 0x0027)//operation enable
         {
@@ -177,7 +187,7 @@ int EcatMotor::Enable(uint8_t *domain1_pd_)
         }
         else //falt
         {
-            std::cout << "---------falt restet-------" << std::endl;
+//            std::cout << "---------falt restet-------" << std::endl;
 
             EC_WRITE_U16(domain1_pd_ + offset.control_word, 0x0080); //falt restet
             static int counter = 0;
@@ -211,7 +221,7 @@ int EcatMotor::Homing(uint8_t *domain1_pd_)
         //set homeing mode
         if(data.mode_display != 0x06)
         {
-            std::cout << "--------mode_display--------" << std::endl;
+//            std::cout << "--------mode_display--------" << std::endl;
 //            motor_status = MOTOR_INIT;
             EC_WRITE_S8(domain1_pd_ + offset.mode, static_cast<int8_t>(6));//homing  mode
         }
@@ -220,14 +230,14 @@ int EcatMotor::Homing(uint8_t *domain1_pd_)
         {
             if((data.status_word & 0x3400) == 0x0400)//homing procedure is interrupted or not started
             {
-                std::cout << "to start homing procedure" << std::endl;
+//                std::cout << "to start homing procedure" << std::endl;
                 EC_WRITE_U16(domain1_pd_ + offset.control_word, static_cast<uint16_t>(0x1f));
 //                motor_state =MOTOR_HOMEING;
 
             }
             else if((data.status_word & 0x3400) == 0x0000) //homing ing
             {
-                std::cout << "homing procedure is running................."<< std::endl;
+//                std::cout << "homing procedure is running................."<< std::endl;
 //                motor_state =MOTOR_HOMEING;
             }
             else if((data.status_word & 0x3400) == 0x1400) //homing ing

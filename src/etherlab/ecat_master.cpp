@@ -96,7 +96,7 @@ void rt_check_master_state(void)
     if (ms.link_up != master_state.link_up)
     {
 //        printf("Link is %s.\n", ms.link_up ? "up" : "down");
-//        RT_PRINT("AL states: " + std::to_string(ms.al_states));
+        RT_PRINT("AL states: " + std::to_string(ms.al_states));
     }
 
     master_state = ms;
@@ -136,6 +136,7 @@ void *thread_func(void *data)
             {
                 #ifdef IMU_Pos_0
                 slaves.imu_0.DataRead(domain1_pd);
+                slaves.imu_0.DataPlay();
                 #endif
 
                 #ifdef IMU_Pos_1
@@ -143,7 +144,7 @@ void *thread_func(void *data)
                 #endif
 
                 #ifdef  WMIO_Pos_0
-                static uint8_t leds=0x55;
+                static uint8_t leds = 0;
                 slaves.wmio_0.DataRead(domain1_pd);
                 EC_WRITE_U8(domain1_pd+slaves.wmio_0.data.led0_7, leds++);
                 #endif
@@ -155,13 +156,17 @@ void *thread_func(void *data)
 
             //time test
             {
-//                for(uint32_t i=0; i<100; i++)
-//                {
-//                    x = tan(i);
-//                    y = atan(i);
-//                    z += x+y;
-//                    y=z;
-//                }
+                if(0)
+                {
+                    for(uint32_t i=0; i<100; i++)
+                    {
+                        x = tan(i);
+                        y = atan(i);
+                        z += x+y;
+                        y=z;
+                    }
+                }
+
 
                 loop_counter++;
                 if (clock_gettime(CLOCK_REALTIME, &systime) == -1)
@@ -172,13 +177,14 @@ void *thread_func(void *data)
 
                 {
                     static int i=0;
-                    if(i++ < 2000) last_time_us=1000;
+                    if(i++ < 10000) last_time_us=1000;
                     else last_time_us = 1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
                     min_time_us = min_time_us > last_time_us?   last_time_us:min_time_us;
                     max_time_us = max_time_us < last_time_us?   last_time_us:max_time_us;
                     lasttime = systime;
                 }
             }
+
             //distribute clock
             ecrt_master_application_time(master, 1000000000*((uint64_t)systime.tv_sec) + systime.tv_nsec);
 //            ecrt_master_application_time(master, systime.tv_nsec);
@@ -243,8 +249,10 @@ int EcatMasterInit(void)
         return -1;
     }
 
+#ifdef MOTOR_Pos_0
+     ecrt_slave_config_dc(slaves.motor_0.sc_motor, 0x0300, 1000000, 440000, 0, 0);
 
-    ecrt_slave_config_dc(slaves.motor_0.sc_motor, 0x0300, 1000000, 440000, 0, 0);
+#endif
 
 //            LOG(INFO) <<"Activating master..."<<std::endl;
     if (ecrt_master_activate(master))
@@ -367,11 +375,16 @@ int main(int argc, char* argv[])
     while (1)
     {
         sleep(1);
-        std::cout<< "cycle times: " << std::dec << loop_counter \
-                 << "    last_time_us: " << std::dec << last_time_us\
-                 << "    min_time_us: " << std::dec << min_time_us \
-                 << "    max_time_us: " << std::dec << max_time_us << std::endl;
-        std::cout<< "z: " << z << std::endl;
+//        std::cout<< "cycle times: " << std::dec << loop_counter \
+//                 << "    last_time_us: " << std::dec << last_time_us\
+//                 << "    min_time_us: " << std::dec << min_time_us \
+//                 << "    max_time_us: " << std::dec << max_time_us << std::endl;
+//        std::cout<< "z: " << z << std::endl;
+
+        RT_PRINT("cycle times: " + std::to_string(loop_counter));
+        RT_PRINT("last_time_us: " + std::to_string(last_time_us));
+        RT_PRINT("min_time_us: " + std::to_string(min_time_us));
+        RT_PRINT("max_time_us: " + std::to_string(max_time_us));
 
         #ifdef IMU_Pos_0
         slaves.imu_0.DataPlay();
@@ -392,6 +405,7 @@ int main(int argc, char* argv[])
         RT_PRINT("I am RT print hahahahaha");
 
         std::cout<< std::endl;
+
     }
 
     std::cout <<"End of Program"<<std::endl;

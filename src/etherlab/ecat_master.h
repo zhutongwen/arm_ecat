@@ -18,9 +18,9 @@
 //#define IMU_Pos_1       0, 1
 
 
-//#define IMU_Pos_0       0, 2
-#define MOTOR_Pos_0     0, 0
-//#define WMIO_Pos_0      0, 1
+#define IMU_Pos_0       0, 0
+#define MOTOR_Pos_0     0, 1
+//#define WMIO_Pos_0      0, 0
 
 typedef struct
 {

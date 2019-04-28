@@ -12,6 +12,7 @@ public:
         unsigned int analog_data;
         unsigned int keys;
         unsigned int leds;
+        unsigned int null;
     }offset_t;
 
     typedef struct
