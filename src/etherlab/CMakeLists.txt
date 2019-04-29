@@ -27,6 +27,8 @@ add_executable(arm_ecat
                         ecat_motor.cpp
                         ecat_task.cpp
                         rt_log.cpp
+                        ecat_syckin_io.cpp
+
 #                        ecat_force.cpp
 #                        record.cpp
 #                        "${PROJECT_SOURCE_DIR}/src/tinyxml2/tinyxml2.cpp"

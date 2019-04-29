@@ -134,6 +134,26 @@ void *thread_func(void *data)
     //        if(master_state.slaves_responding == static_cast<unsigned int>(1))
             if(master_state.al_states == 0x08)
             {
+
+                #ifdef SYCKIN_Pos_0
+                    static uint32_t i=0;
+                    if(++i > 500)
+                    {
+                        static uint16_t counter=1;
+                        counter <<= 1;
+                        if(!counter) counter = 1;
+                        i = 0;
+
+
+                        slaves.SycKin_0.DataRead(domain1_pd);
+                        EC_WRITE_U16(domain1_pd + slaves.SycKin_0.offset.u16Dos, counter);
+
+                        std::cout<< "DIs: " << slaves.SycKin_0.data.u16Dis << std::endl;
+                        std::cout<< "DOs: " << counter << std::endl;
+                        std::cout<< std::endl;
+                    }
+                #endif
+
                 #ifdef IMU_Pos_0
                 slaves.imu_0.DataRead(domain1_pd);
                 slaves.imu_0.DataPlay();
@@ -221,6 +241,11 @@ int EcatMasterInit(void)
     }
 
 //            LOG(INFO) <<"Creating slave configurations..."<<std::endl;
+
+
+    #ifdef SYCKIN_Pos_0
+        slaves.SycKin_0.Init(master,SYCKIN_Pos_0);
+    #endif
 
     #ifdef IMU_Pos_0
         slaves.imu_0.Init(master,IMU_Pos_0);
@@ -381,10 +406,20 @@ int main(int argc, char* argv[])
 //                 << "    max_time_us: " << std::dec << max_time_us << std::endl;
 //        std::cout<< "z: " << z << std::endl;
 
-        RT_PRINT("cycle times: " + std::to_string(loop_counter));
-        RT_PRINT("last_time_us: " + std::to_string(last_time_us));
-        RT_PRINT("min_time_us: " + std::to_string(min_time_us));
-        RT_PRINT("max_time_us: " + std::to_string(max_time_us));
+        if(0)
+        {
+            RT_PRINT("cycle times: " + std::to_string(loop_counter));
+            RT_PRINT("last_time_us: " + std::to_string(last_time_us));
+            RT_PRINT("min_time_us: " + std::to_string(min_time_us));
+            RT_PRINT("max_time_us: " + std::to_string(max_time_us));
+        }
+
+
+
+
+        #ifdef SYCKIN_Pos_0
+//        slaves.SycKin_0.DataPlay();
+        #endif
 
         #ifdef IMU_Pos_0
         slaves.imu_0.DataPlay();
@@ -402,9 +437,7 @@ int main(int argc, char* argv[])
         slaves.motor_0.Display();
         #endif
 
-        RT_PRINT("I am RT print hahahahaha");
-
-        std::cout<< std::endl;
+//        std::cout<< std::endl;
 
     }
 

@@ -7,6 +7,8 @@
 #include "ecat_imu.h"
 #include "ecat_wmio.h"
 #include "ecat_motor.h"
+#include "ecat_syckin_io.h"
+
 
 
 #define PI  3.141592654
@@ -18,12 +20,17 @@
 //#define IMU_Pos_1       0, 1
 
 
-#define IMU_Pos_0       0, 0
-#define MOTOR_Pos_0     0, 1
+//#define IMU_Pos_0       0, 0
+//#define MOTOR_Pos_0     0, 1
 //#define WMIO_Pos_0      0, 0
+
+#define SYCKIN_Pos_0       0, 0
 
 typedef struct
 {
+#ifdef SYCKIN_Pos_0
+    EcatSycKinIO SycKin_0;
+#endif
 
 #ifdef IMU_Pos_0
     EcatImu imu_0;
