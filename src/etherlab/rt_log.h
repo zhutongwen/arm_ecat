@@ -28,25 +28,25 @@
 #include <iostream>
 #include <string>
 #include <libgen.h>
+#include <ios>
+#include <iostream>
+#include <fstream>
 
-#define BUFFER_SIZE 512
-#define RT_PRINT(x) {   struct message msg; \
-                        msg.msg_type = getpid(); \
-                        msg.msg_text = basename((char*)__FILE__) + space + std::to_string(__LINE__) + ": " + x; \
-                        msgsnd(qid, &msg, msg.msg_text.length(), 0);}
+#include <vector>
 
-
-
-
-struct message
-{
-    long msg_type;
-    std::string msg_text;
-};
-
-extern int qid;
 extern std::string space;
 
+#define RT_PRINT(x)     {vPrintdata.push_back( (char*)__FILE__ + space + std::to_string(__LINE__) + ": " + x + '\n');}
+extern std::vector<std::string> vPrintdata;
+void *RTPrintThread(void *data);
+
+
+extern std::vector<std::string> vLogdata;
 void *RTLogThread(void *data);
+
+
+//////////////////////////////////////////////////////////////
+
+
 
 #endif

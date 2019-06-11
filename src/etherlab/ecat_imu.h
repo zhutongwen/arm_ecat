@@ -35,6 +35,7 @@ public:
 
     offset_t offset;
     data_t data;
+    ec_slave_config_t *sc_imu;
 
 
     //TxPdo

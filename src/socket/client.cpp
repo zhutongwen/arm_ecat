@@ -24,12 +24,16 @@
 #include <stdlib.h>
 #include <string>
 #include "tcpconnector.h"
+#include <time.h>
+#include <iostream>
+
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    if (argc != 3) {
+    if (argc != 3)
+    {
         printf("usage: %s <port> <ip>\n", argv[0]);
         exit(1);
     }
@@ -39,25 +43,40 @@ int main(int argc, char** argv)
     char line[256];
     TCPConnector* connector = new TCPConnector();
     TCPStream* stream = connector->connect(argv[2], atoi(argv[1]));
-    if (stream) {
-        message = "Is there life on Mars?";
-        stream->send(message.c_str(), message.size());
-        printf("sent - %s\n", message.c_str());
-        len = stream->receive(line, sizeof(line));
-        line[len] = 0;
-        printf("received - %s\n", line);
-        delete stream;
-    }
 
-    stream = connector->connect(argv[2], atoi(argv[1]));
-    if (stream) {
-        message = "Why is there air?";
+
+    struct timespec systime;
+    message = 1;
+    while (stream)
+    {
+
+        clock_gettime(CLOCK_REALTIME, &systime);
+        std::cout << "time in: " << systime.tv_sec << "." << systime.tv_nsec << std::endl;
+
+
         stream->send(message.c_str(), message.size());
-        printf("sent - %s\n", message.c_str());
-        len = stream->receive(line, sizeof(line));
-        line[len] = 0;
-        printf("received - %s\n", line);
-        delete stream;
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+        stream->send(message.c_str(), message.size());
+
+//        printf("sent - %s\n", message.c_str());
+//        len = stream->receive(line, sizeof(line));
+//        line[len] = 0;
+//        printf("received - %s\n", line);
+
+        clock_gettime(CLOCK_REALTIME, &systime);
+         std::cout << "time out: " << systime.tv_sec << "." << systime.tv_nsec << std::endl << std::endl;
+
+
+
+//        delete stream;
     }
     exit(0);
 }

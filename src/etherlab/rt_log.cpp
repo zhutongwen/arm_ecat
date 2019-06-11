@@ -1,51 +1,73 @@
 #include "rt_log.h"
-#include <ios>
-#include <iostream>
-#include <fstream>
 
-int qid;
-std::string space("  ");
+std::string space = " ";
 
+std::vector<std::string> vPrintdata;
+void *RTPrintThread(void *data)
+{
+    static std::ofstream RT_print_file;//("RT_print_file.txt");
+    RT_print_file.close();
+//    RT_print_file.open("/tmp/log_file.txt", std::ios::out | std::ios::trunc);
+    RT_print_file.open("./RT_print_file.txt", std::ios::out | std::ios::trunc);
+    if(RT_print_file.is_open())
+    {
+        std::cout << "start RTPrintThread..." << std::endl;
+        while(1)
+        {
+            uint32_t logsize = vPrintdata.size();
+            if(logsize)
+            {
+                std::cout << "printdata size: " <<vPrintdata.size() << std::endl;
+                for(uint32_t i=0; i< logsize; i++)
+                {
+                    std::cout << vPrintdata.at(i);
+                    RT_print_file << vPrintdata.at(i);
+                }
+                vPrintdata.erase(vPrintdata.begin(), vPrintdata.begin()+logsize);
+                RT_print_file.flush();
+            }
+            sleep(1);
+        }
+    }
+    else
+    {
+        std::cout << "start RTPrintThread error!!!" << std::endl;
+    }
+    return 0;
+}
 
-
-
+std::vector<std::string> vLogdata;
 void *RTLogThread(void *data)
 {
-    struct message msg;
-    static std::fstream log_file;//("log_file.txt");
-//    if(log_file.is_open())     log_file << "msg.msg_text.c_str()" << std::endl;
-//    std::streambuf *x = log_file.rdbuf();
-//    std::cout.rdbuf(log_file.rdbuf());
-    if ((qid = msgget(1, IPC_CREAT|0666)) == -1)
+    static std::ofstream RT_log_file;//("log_file.txt");
+    RT_log_file.close();
+//    log_file.open("/tmp/log_file.txt", std::ios::out | std::ios::trunc);
+    RT_log_file.open("./RT_log_file.txt", std::ios::out | std::ios::trunc);
+    if(RT_log_file.is_open())
     {
-        perror("msgget");
-        exit(1);
-    }
-
-    log_file.close();
-    log_file.open("/tmp/log_file.txt", std::ios::out | std::ios::trunc);
-    if(log_file.is_open())     log_file << "msg.msg_text.c_str()" << std::endl;
-
-    do
-    {
-        if (msgrcv(qid, (void*)&msg, BUFFER_SIZE, 0, 0) < 0)
+        std::cout << "start RTLogThread..." << std::endl;
+        while(1)
         {
-            perror("msgrcv");
-            exit(1);
+            uint32_t logsize = vLogdata.size();
+            if(logsize)
+            {
+                std::cout << "logdata size: " <<vLogdata.size() << std::endl;
+                for(uint32_t i=0; i< logsize; i++)
+                {
+                    RT_log_file << vLogdata.at(i);
+                }
+                vLogdata.erase(vLogdata.begin(), vLogdata.begin()+logsize);
+                RT_log_file.flush();
+            }
+            sleep(1);
         }
-
-
-        if(log_file.is_open())     log_file << msg.msg_text.c_str() << std::endl;
-        std::cout << msg.msg_text.c_str() << std::endl;
-//        std::cout.rdbuf(x);
-
-        msg.msg_text.clear();
-    } while(strncmp(msg.msg_text.data(), "quit", 4));
-    /*从系统内核中移走消息队列 */
-    if ((msgctl(qid, IPC_RMID, NULL)) < 0)
-    {
-        perror("msgctl");
-        exit(1);
     }
-    exit(0);
+    else
+    {
+       std::cout << "start RTLogThread error!!!" << std::endl;
+    }
+    return 0;
 }
+
+
+

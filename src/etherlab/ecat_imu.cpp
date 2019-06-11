@@ -21,7 +21,6 @@ int EcatImu::Init   (ec_master_t    *master_,
                     uint16_t        alias_, /**< Slave alias. */
                     uint16_t        position_)
 {
-    ec_slave_config_t *sc_imu;
     sc_imu = ecrt_master_slave_config(master_, alias_, position_, IMU);
     if(NULL == sc_imu)
     {
@@ -65,16 +64,24 @@ void EcatImu::DataWrite(uint8_t *domain1_pd_)
 }
 void EcatImu::DataPlay(void)
 {
-//    std::cout << "gx:" << data.gx << std::endl;
-//    std::cout << "gy:" << data.gy << std::endl;
-//    std::cout << "gz:" << data.gz << std::endl;
-//    std::cout << "ax:" << data.ax << std::endl;
-//    std::cout << "ay:" << data.ay << std::endl;
-//    std::cout << "az:" << data.az << std::endl;
-//    std::cout << "counter:" << std::dec << data.counter << std::endl << std::endl;
+    std::cout << "gx:" << data.gx << std::endl;
+    std::cout << "gy:" << data.gy << std::endl;
+    std::cout << "gz:" << data.gz << std::endl;
+    std::cout << "ax:" << data.ax << std::endl;
+    std::cout << "ay:" << data.ay << std::endl;
+    std::cout << "az:" << data.az << std::endl;
+    std::cout << "counter:" << std::dec << data.counter << std::endl << std::endl;
 
-    RT_PRINT("gx: " + std::to_string(data.ax));
-    RT_PRINT("gy: " + std::to_string(data.ay));
-    RT_PRINT("gz: " + std::to_string(data.az));
-    RT_PRINT("counter: " + std::to_string(data.counter));
+//    RT_PRINT("gx: " + std::to_string(data.ax) + \
+//             "    gy: " + std::to_string(data.ay) + \
+//             "    gz: " + std::to_string(data.az) + \
+//             "    counter: " + std::to_string(data.counter));
+//    RT_PRINT("gy: " + std::to_string(data.ay));
+//    RT_PRINT("gz: " + std::to_string(data.az));
+//    RT_PRINT("counter: " + std::to_string(data.counter));
+
+//    RT_PRINT("gx: " + std::to_string(data.ax) + "gy: " + std::to_string(data.ay) + "gz: " + std::to_string(data.az) + "counter: " + std::to_string(data.counter));
+//    RT_PRINT("gy: " + std::to_string(data.ay));
+//    RT_PRINT("gz: " + std::to_string(data.az));
+//    RT_PRINT("counter: " + std::to_string(data.counter));
 }

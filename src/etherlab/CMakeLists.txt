@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/include/")
 
 
 add_executable(arm_ecat
+                        ecat_main.cpp
                         ecat_master.cpp
                         ecat_imu.cpp
                         ecat_wmio.cpp
@@ -28,6 +29,8 @@ add_executable(arm_ecat
                         ecat_task.cpp
                         rt_log.cpp
                         ecat_syckin_io.cpp
+                        ecat_shidian_io.cpp
+                        ecat_wmadc.cpp
 
 #                        ecat_force.cpp
 #                        record.cpp

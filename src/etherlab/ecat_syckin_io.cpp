@@ -21,7 +21,6 @@ int EcatSycKinIO::Init   (ec_master_t    *master_,
                     uint16_t        alias_, /**< Slave alias. */
                     uint16_t        position_)
 {
-    ec_slave_config_t *sc;
     sc = ecrt_master_slave_config(master_, alias_, position_, SYCKIN_IO);
     if(NULL == sc)
     {

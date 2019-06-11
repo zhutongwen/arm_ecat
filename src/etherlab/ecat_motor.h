@@ -124,6 +124,7 @@ public:
     int Homing(uint8_t *domain1_pd_);
     int SetMode(uint8_t *domain1_pd_, mode_t mode_);
     int SetTargtVelocity(uint8_t *domain1_pd_, int32_t velocity_);
+    int SetTargtTorque(uint8_t *domain1_pd_, int16_t torque_);
 
     uint8_t GetMode();
     int32_t GetActualPosition();

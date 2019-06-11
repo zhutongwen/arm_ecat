@@ -13,20 +13,20 @@ EcatMotor::~EcatMotor()
 
 int EcatMotor::Display(void)
 {
-//    std::cout << "actual_pos:" << std::dec << data.actual_pos << std::endl;
-//    std::cout << "actual_vel:" << std::dec << data.actual_vel << std::endl;
-//    std::cout << "actual_cur:" << std::dec << data.actual_cur << std::endl;
-//    std::cout << "actual_tor:" << std::dec << data.actual_tor << std::endl;
-//    std::cout << "status_word: 0x" << std::hex << data.status_word << std::endl;
-//    std::cout << "mode_display: 0x" << std::hex << (uint16_t)data.mode_display << std::endl;
+    std::cout << "actual_pos:" << std::dec << data.actual_pos << std::endl;
+    std::cout << "actual_vel:" << std::dec << data.actual_vel << std::endl;
+    std::cout << "actual_cur:" << std::dec << data.actual_cur << std::endl;
+    std::cout << "actual_tor:" << std::dec << data.actual_tor << std::endl;
+    std::cout << "status_word: 0x" << std::hex << data.status_word << std::endl;
+    std::cout << "mode_display: 0x" << std::hex << (uint16_t)data.mode_display << std::endl;
 
 
-    RT_PRINT("actual_pos: " + std::to_string(data.actual_pos));
-    RT_PRINT("actual_vel: " + std::to_string(data.actual_vel));
-    RT_PRINT("actual_cur: " + std::to_string(data.actual_cur));
-    RT_PRINT("actual_tor: " + std::to_string(data.actual_tor));
-    RT_PRINT("status_word: " + std::to_string(data.status_word));
-    RT_PRINT("mode_display: " + std::to_string(data.mode_display));
+//    RT_PRINT("actual_pos: " + std::to_string(data.actual_pos));
+//    RT_PRINT("actual_vel: " + std::to_string(data.actual_vel));
+//    RT_PRINT("actual_cur: " + std::to_string(data.actual_cur));
+//    RT_PRINT("actual_tor: " + std::to_string(data.actual_tor));
+//    RT_PRINT("status_word: " + std::to_string(data.status_word));
+//    RT_PRINT("mode_display: " + std::to_string(data.mode_display));
 
     return 0;
 }
@@ -139,14 +139,6 @@ int EcatMotor::Init(ec_master_t *master_,
 
 int EcatMotor::Enable(uint8_t *domain1_pd_)
 {
-    // read process data
-    data.actual_pos = EC_READ_S32(domain1_pd_ + offset.actual_pos);
-    data.actual_vel = EC_READ_S32(domain1_pd_ + offset.actual_vel);
-    data.actual_cur = EC_READ_S16(domain1_pd_ + offset.actual_cur);
-    data.actual_tor = EC_READ_S16(domain1_pd_ + offset.actual_tor);
-    data.status_word = EC_READ_U16(domain1_pd_ + offset.status_word);
-    data.mode_display = EC_READ_U8(domain1_pd_ + offset.mode_display);
-
     int motor_status = data.status_word & 0x006f;
 
     if(data.mode_display != 0x06)
@@ -221,8 +213,6 @@ int EcatMotor::Homing(uint8_t *domain1_pd_)
         //set homeing mode
         if(data.mode_display != 0x06)
         {
-//            std::cout << "--------mode_display--------" << std::endl;
-//            motor_status = MOTOR_INIT;
             EC_WRITE_S8(domain1_pd_ + offset.mode, static_cast<int8_t>(6));//homing  mode
         }
 
@@ -283,7 +273,7 @@ int EcatMotor::SetMode(uint8_t *domain1_pd_, mode_t mode_)
                 motor_state = STATE_CSV;
                 break;
             case MODE_CST:
-                EC_WRITE_S16(domain1_pd_ + offset.target_tor, static_cast<int32_t>(0));
+                EC_WRITE_S16(domain1_pd_ + offset.target_tor, static_cast<int16_t>(0));
                 motor_state = STATE_CST;
                 break;
             default:
@@ -312,4 +302,14 @@ int EcatMotor::SetTargtVelocity(uint8_t *domain1_pd_, int32_t velocity_)
     }
 
     EC_WRITE_S32(domain1_pd_ + offset.target_vel, velocity_);
+}
+
+int EcatMotor::SetTargtTorque(uint8_t *domain1_pd_, int16_t torque_)
+{
+    if(motor_state != STATE_CST)
+    {
+        return -1;
+    }
+
+    EC_WRITE_S16(domain1_pd_ + offset.target_tor, torque_);
 }
