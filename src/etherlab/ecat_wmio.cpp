@@ -18,8 +18,6 @@ int EcatWmio::Init   (ec_master_t    *master_,
         return -1;
     }
 
-//    ecrt_slave_config_dc(sc_imu, 0x0300, 1000000, 440000, 0, 0);
-
     EcatSlave::domain_regs.pop_back(); //删除a向量的最后一个元素
 
     EcatSlave::domain_regs.push_back({alias_, position_, WMIO, 0x6020, 0x01, &offset.analog_data, NULL});

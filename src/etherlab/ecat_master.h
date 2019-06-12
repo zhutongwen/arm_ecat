@@ -36,7 +36,14 @@
 
 
 #define MOTOR_Pos_0       0, 0
-#define IMU_Pos_0         0, 1
+#define MOTOR_Pos_1       0, 1
+#define MOTOR_Pos_2       0, 2
+#define MOTOR_Pos_3       0, 3
+#define MOTOR_Pos_4       0, 4
+#define MOTOR_Pos_5       0, 5
+
+#define IMU_Pos_0         0, 6
+
 //#define IMU_Pos_1         0, 3
 //#define IMU_Pos_2         0, 4
 //#define IMU_Pos_3         0, 5
@@ -64,7 +71,7 @@ typedef struct
 
 
 #ifdef MOTOR_Pos_0
-    EcatMotor motor_0;
+    EcatMotor motor[6];
 #endif
 
 #ifdef IMU_Pos_0
@@ -94,7 +101,7 @@ typedef struct
 
 }slaves_t;
 
-//extern slaves_t slaves;
+extern slaves_t slaves;
 
 void LoopTest(void);
 
@@ -105,10 +112,11 @@ public:
     ec_master_t *master = NULL;
     ec_master_state_t master_state = {};
     ec_domain_t *domain1 = NULL;
-    ec_domain_state_t domain1_state = {};
+
     uint8_t *domain1_pd = NULL;
 
     slaves_t slaves;
+    uint32_t u32GlobalCounter = 0;
 
 
     EcatMaster();

@@ -151,7 +151,11 @@ public:
 
 private:
 
-    #define ELMO            0x0000009a, 0x00030924
+    //ELMO
+//    #define ELMO            0x0000009a, 0x00030924
+    //DRIVER
+    #define ELMO            0x0000089c, 0x20173052
+
 
 //    enum
 //    {

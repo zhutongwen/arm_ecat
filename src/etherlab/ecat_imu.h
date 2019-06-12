@@ -1,9 +1,7 @@
 #ifndef ETHERCAT_IMU_H
-#define ETHERCAT_IMU_H
-
+#define ETHERCAT_IMU_Hs
 
 #include "ecat_slave.h"
-
 
 class EcatImu : public EcatSlave
 {

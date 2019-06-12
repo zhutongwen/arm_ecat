@@ -3,18 +3,19 @@
 
 void EcatMaster::rt_check_domain_state(void)
 {
+    static ec_domain_state_t domain1_state = {};
     ec_domain_state_t ds;
 
     ecrt_domain_state(domain1, &ds);
 
     if (ds.working_counter != domain1_state.working_counter)
     {
-        RT_PRINT("Domain1: WC" + std::to_string(ds.working_counter));
+        RT_PRINT("Domain1: WC: " + std::to_string(ds.working_counter));
     }
 
     if (ds.wc_state != domain1_state.wc_state)
     {
-        RT_PRINT("Domain1: State " + std::to_string(ds.wc_state));
+        RT_PRINT("Domain1: State: " + std::to_string(ds.wc_state));
     }
     domain1_state = ds;
 }
@@ -28,21 +29,20 @@ void EcatMaster::rt_check_master_state(void)
 
     if (ms.slaves_responding != master_state.slaves_responding)
     {
-        RT_PRINT(std::to_string(ms.slaves_responding) + " slave(s).");
         master_state.slaves_responding = ms.slaves_responding;
+        RT_PRINT( "number of slave(s): " + std::to_string(ms.slaves_responding));
     }
 
     if (ms.al_states != master_state.al_states)
     {
-        RT_PRINT("ms AL states: " + std::to_string(ms.al_states));
-        RT_PRINT("master_state AL states: " + std::to_string(master_state.al_states));
         master_state.al_states = ms.al_states;
+        RT_PRINT("master_state AL states: " + std::to_string(master_state.al_states));
     }
 
     if (ms.link_up != master_state.link_up)
     {
-        RT_PRINT("AL states: " + std::to_string(ms.al_states));
         master_state.link_up = ms.link_up;
+        RT_PRINT("master_state.link_up: " + std::to_string(ms.link_up));
     }
 }
 
@@ -83,7 +83,22 @@ void EcatMaster::Init(void)
     #endif
 
     #ifdef MOTOR_Pos_0
-        slaves.motor_0.Init(master, MOTOR_Pos_0);
+        slaves.motor[0].Init(master, MOTOR_Pos_0);
+    #endif
+    #ifdef MOTOR_Pos_1
+        slaves.motor[1].Init(master, MOTOR_Pos_1);
+    #endif
+    #ifdef MOTOR_Pos_2
+        slaves.motor[2].Init(master, MOTOR_Pos_2);
+    #endif
+    #ifdef MOTOR_Pos_3
+        slaves.motor[3].Init(master, MOTOR_Pos_3);
+    #endif
+    #ifdef MOTOR_Pos_4
+        slaves.motor[4].Init(master, MOTOR_Pos_4);
+    #endif
+    #ifdef MOTOR_Pos_5
+        slaves.motor[5].Init(master, MOTOR_Pos_5);
     #endif
 
     #ifdef IMU_Pos_0
@@ -120,7 +135,22 @@ void EcatMaster::Init(void)
     }
 
     #ifdef MOTOR_Pos_0
-         ecrt_slave_config_dc(slaves.motor_0.sc_motor, 0x0300, 1000000, 440000, 0, 0);
+         ecrt_slave_config_dc(slaves.motor[0].sc_motor, 0x0300, 1000000, 440000, 0, 0);
+    #endif
+    #ifdef MOTOR_Pos_1
+         ecrt_slave_config_dc(slaves.motor[1].sc_motor, 0x0300, 1000000, 440000, 0, 0);
+    #endif
+    #ifdef MOTOR_Pos_2
+         ecrt_slave_config_dc(slaves.motor[2].sc_motor, 0x0300, 1000000, 440000, 0, 0);
+    #endif
+    #ifdef MOTOR_Pos_3
+         ecrt_slave_config_dc(slaves.motor[3].sc_motor, 0x0300, 1000000, 440000, 0, 0);
+    #endif
+    #ifdef MOTOR_Pos_4
+         ecrt_slave_config_dc(slaves.motor[4].sc_motor, 0x0300, 1000000, 440000, 0, 0);
+    #endif
+    #ifdef MOTOR_Pos_5
+         ecrt_slave_config_dc(slaves.motor[5].sc_motor, 0x0300, 1000000, 440000, 0, 0);
     #endif
 
     #ifdef WMIO_Pos_0
@@ -152,17 +182,10 @@ void EcatMaster::Init(void)
     }
 
     ec_master_info_t master_info;
-    if(0 != ecrt_master(master, &master_info))
+    if(ecrt_master(master, &master_info))
     {
         RT_PRINT("ecrt_master error!!!");
     }
-    else
-    {
-        RT_PRINT("number of slave(s):" + std::to_string(master_info.slave_count));
-    }
-
-
-
 }
 
 EcatMaster::~EcatMaster(void)

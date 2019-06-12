@@ -3,7 +3,7 @@
 
 EcatImu::EcatImu()
 {
-    std::cout << "????????????????????????????????" << std::endl;
+
 }
 
 EcatImu::EcatImu(uint16_t alias, uint16_t position)
@@ -57,6 +57,23 @@ void EcatImu::DataRead(uint8_t *domain1_pd_)
     data.ay = EC_READ_FLOAT(domain1_pd_ + offset.ay);
     data.az = EC_READ_FLOAT(domain1_pd_ + offset.az);
     data.counter = EC_READ_U32(domain1_pd_ + offset.counter);
+
+//    RT_log_file << data.gx << ' ';
+//    RT_log_file << data.gy << ' ';
+//    RT_log_file << data.gz << ' ';
+//    RT_log_file << data.ax << ' ';
+//    RT_log_file << data.ay << ' ';
+//    RT_log_file << data.az << ' ';
+//    RT_log_file << data.counter << ' ';
+//    RT_log_file << std::endl;
+
+//    vLogdata.push_back(std::to_string(data.gx) + ' ');
+//    vLogdata.push_back(std::to_string(data.gy) + ' ');
+//    vLogdata.push_back(std::to_string(data.gz) + ' ');
+//    vLogdata.push_back(std::to_string(data.ax) + ' ');
+//    vLogdata.push_back(std::to_string(data.ay) + ' ');
+//    vLogdata.push_back(std::to_string(data.az) + ' ');
+//    vLogdata.push_back(std::to_string(data.counter) + ' ');
 }
 void EcatImu::DataWrite(uint8_t *domain1_pd_)
 {
@@ -64,24 +81,16 @@ void EcatImu::DataWrite(uint8_t *domain1_pd_)
 }
 void EcatImu::DataPlay(void)
 {
-    std::cout << "gx:" << data.gx << std::endl;
-    std::cout << "gy:" << data.gy << std::endl;
-    std::cout << "gz:" << data.gz << std::endl;
-    std::cout << "ax:" << data.ax << std::endl;
-    std::cout << "ay:" << data.ay << std::endl;
-    std::cout << "az:" << data.az << std::endl;
-    std::cout << "counter:" << std::dec << data.counter << std::endl << std::endl;
+//    std::cout << "gx:" << data.gx << std::endl;
+//    std::cout << "gy:" << data.gy << std::endl;
+//    std::cout << "gz:" << data.gz << std::endl;
+//    std::cout << "ax:" << data.ax << std::endl;
+//    std::cout << "ay:" << data.ay << std::endl;
+//    std::cout << "az:" << data.az << std::endl;
+//    std::cout << "counter:" << std::dec << data.counter << std::endl << std::endl;
 
-//    RT_PRINT("gx: " + std::to_string(data.ax) + \
-//             "    gy: " + std::to_string(data.ay) + \
-//             "    gz: " + std::to_string(data.az) + \
-//             "    counter: " + std::to_string(data.counter));
-//    RT_PRINT("gy: " + std::to_string(data.ay));
-//    RT_PRINT("gz: " + std::to_string(data.az));
-//    RT_PRINT("counter: " + std::to_string(data.counter));
-
-//    RT_PRINT("gx: " + std::to_string(data.ax) + "gy: " + std::to_string(data.ay) + "gz: " + std::to_string(data.az) + "counter: " + std::to_string(data.counter));
-//    RT_PRINT("gy: " + std::to_string(data.ay));
-//    RT_PRINT("gz: " + std::to_string(data.az));
-//    RT_PRINT("counter: " + std::to_string(data.counter));
+    RT_PRINT("ax: " + std::to_string(data.ax));
+    RT_PRINT("ay: " + std::to_string(data.ay));
+    RT_PRINT("az: " + std::to_string(data.az));
+    RT_PRINT("counter: " + std::to_string(data.counter));
 }

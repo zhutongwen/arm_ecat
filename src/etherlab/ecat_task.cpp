@@ -2,58 +2,54 @@
 #include <math.h>
 
 
-
+extern EcatMaster  EMaster;
 void ControlTask(uint8_t *domain1_pd_, slaves_t &slaves_)
 {
+//    vLogdata.push_back(std::to_string(EMaster.u32GlobalCounter++) + ' ');
+//    RT_log_file << EMaster.u32GlobalCounter++ << ' ';
     /****************************************************************************/
     // motor
     #ifdef MOTOR_Pos_0
+    for(int i = 0; i < 6; i++)
     {
-//        vLogdata.push_back(std::to_string(slaves_.motor_0.data.actual_pos) + ' ');
-//        vLogdata.push_back(std::to_string(slaves_.motor_0.data.target_pos) + ' ');
-        slaves_.motor_0.DataRead(domain1_pd_);
-//        slaves_.motor_0.DataRTlog(vLogdata);
+        slaves_.motor[i].DataRead(domain1_pd_);
 
-        switch (slaves_.motor_0.motor_state)
+        switch (slaves_.motor[i].motor_state)
         {
-            case slaves_.motor_0.STATE_INIT:
-                slaves_.motor_0.Enable(domain1_pd_);
+            case slaves_.motor[i].STATE_INIT:
+                slaves_.motor[i].Enable(domain1_pd_);
             break;
 
-            case slaves_.motor_0.STATE_ENABLED:
-                slaves_.motor_0.Homing(domain1_pd_);
+            case slaves_.motor[i].STATE_ENABLED:
+                slaves_.motor[i].Homing(domain1_pd_);
             break;
 
-            case slaves_.motor_0.STATE_HOMED:
-                slaves_.motor_0.SetMode(domain1_pd_, slaves_.motor_0.MODE_CSV);//static_cast<mode_t>
+            case slaves_.motor[i].STATE_HOMED:
+                slaves_.motor[i].SetMode(domain1_pd_, slaves_.motor[i].MODE_CSV);//static_cast<mode_t>
             break;
 
-            case slaves_.motor_0.STATE_CSV:
+            case slaves_.motor[i].STATE_CSV:
             {
                 static float f32angle = 0;
 
-                f32angle += 0.0002;
+                f32angle += 0.0001;
                 if(f32angle >= 1) f32angle = 0;
 
-                slaves_.motor_0.data.target_vel = 5.0*65535.0*sin(f32angle*(2.0*PI));
-                slaves_.motor_0.SetTargtVelocity(domain1_pd_, static_cast<int32_t>(slaves_.motor_0.data.target_vel));
+                slaves_.motor[i].data.target_vel = 1.0*65535.0*sin(f32angle*(2.0*PI));
+//                slaves_.motor_0.data.target_vel = 20*65536*slaves_.imu_0.data.ax;
+
+                slaves_.motor[i].SetTargtVelocity(domain1_pd_, static_cast<int32_t>(slaves_.motor[i].data.target_vel));
             }
             break;
 
-            case slaves_.motor_0.STATE_CST:
-            {
-                 slaves_.motor_0.SetTargtTorque(domain1_pd_, static_cast<int16_t>(100));
-            }
+//            case slaves_.motor_0.STATE_CST:
+//            {
+//                 slaves_.motor_0.SetTargtTorque(domain1_pd_, static_cast<int16_t>(100));
+//            }
             break;
             default:
                 break;
         }
-        vLogdata.push_back(std::to_string(slaves_.motor_0.data.actual_pos) + ' ');
-        vLogdata.push_back(std::to_string(slaves_.motor_0.data.target_pos) + ' ');
-        vLogdata.push_back(std::to_string(slaves_.motor_0.data.actual_vel) + ' ');
-        vLogdata.push_back(std::to_string(slaves_.motor_0.data.target_vel) + ' ');
-        vLogdata.push_back(std::to_string(slaves_.motor_0.data.mode_display) + ' ');
-        vLogdata.push_back(std::to_string(slaves_.motor_0.data.status_word) + ' ');
     }
     #endif
 
@@ -124,6 +120,4 @@ void ControlTask(uint8_t *domain1_pd_, slaves_t &slaves_)
         slaves_.wmadc_0.DataRead(domain1_pd_);
         EC_WRITE_U8(domain1_pd_ + slaves_.wmadc_0.offset.leds, slaves_.wmadc_0.data.led0_7);
     #endif
-
-    vLogdata.push_back("\n");
 }
