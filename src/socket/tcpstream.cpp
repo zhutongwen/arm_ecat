@@ -36,8 +36,10 @@ TCPStream::~TCPStream()
     close(m_sd);
 }
 
-ssize_t TCPStream::send(const char* buffer, size_t len) 
+ssize_t TCPStream::send(std::string send_data)//(const char* buffer, size_t len)
 {
+    const char* buffer = send_data.data();
+    size_t len = send_data.size();
     return write(m_sd, buffer, len);
 }
 

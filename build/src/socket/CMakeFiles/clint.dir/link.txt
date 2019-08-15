@@ -1,0 +1,1 @@
+/usr/bin/arm-linux-gnueabihf-g++  -std=c++11 -pthread -static  -rdynamic CMakeFiles/clint.dir/client.cpp.o CMakeFiles/clint.dir/tcpstream.cpp.o CMakeFiles/clint.dir/tcpconnector.cpp.o  -o ../../bin/clint 

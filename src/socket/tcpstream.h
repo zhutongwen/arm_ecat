@@ -43,7 +43,7 @@ class TCPStream
 
     ~TCPStream();
 
-    ssize_t send(const char* buffer, size_t len);
+    ssize_t send(std::string send_data);//(const char* buffer, size_t len);
     ssize_t receive(char* buffer, size_t len, int timeout=0);
 
     string getPeerIP();

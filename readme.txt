@@ -8,6 +8,7 @@ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- omap2plus_defconfig
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j12
 
 mount -t nfs -o nolock,rw 192.168.1.152:/home/xw/am437/nfs /mnt
+mount -t nfs -o nolock,rw 192.168.1.24:/home/xw/am437/nfs /mnt
 
 
 //

@@ -47,16 +47,19 @@ int EcatImu::Init   (ec_master_t    *master_,
     return 0;
 }
 
+#define PI 3.14159265
 void EcatImu::DataRead(uint8_t *domain1_pd_)
 {
     // read process data
-    data.gx = EC_READ_FLOAT(domain1_pd_ + offset.gx);
-    data.gy = EC_READ_FLOAT(domain1_pd_ + offset.gy);
-    data.gz = EC_READ_FLOAT(domain1_pd_ + offset.gz);
-    data.ax = EC_READ_FLOAT(domain1_pd_ + offset.ax);
-    data.ay = EC_READ_FLOAT(domain1_pd_ + offset.ay);
-    data.az = EC_READ_FLOAT(domain1_pd_ + offset.az);
+    data.gx = EC_READ_FLOAT(domain1_pd_ + offset.gx)/360.0 * 2 * PI;
+    data.gy = EC_READ_FLOAT(domain1_pd_ + offset.gy)/360.0 * 2 * PI;
+    data.gz = EC_READ_FLOAT(domain1_pd_ + offset.gz)/360.0 * 2 * PI;
+    data.ax = 9.8*EC_READ_FLOAT(domain1_pd_ + offset.ax);
+    data.ay = 9.8*EC_READ_FLOAT(domain1_pd_ + offset.ay);
+    data.az = 9.8*EC_READ_FLOAT(domain1_pd_ + offset.az);
     data.counter = EC_READ_U32(domain1_pd_ + offset.counter);
+
+
 
 //    RT_log_file << data.gx << ' ';
 //    RT_log_file << data.gy << ' ';
@@ -67,13 +70,7 @@ void EcatImu::DataRead(uint8_t *domain1_pd_)
 //    RT_log_file << data.counter << ' ';
 //    RT_log_file << std::endl;
 
-//    vLogdata.push_back(std::to_string(data.gx) + ' ');
-//    vLogdata.push_back(std::to_string(data.gy) + ' ');
-//    vLogdata.push_back(std::to_string(data.gz) + ' ');
-//    vLogdata.push_back(std::to_string(data.ax) + ' ');
-//    vLogdata.push_back(std::to_string(data.ay) + ' ');
-//    vLogdata.push_back(std::to_string(data.az) + ' ');
-//    vLogdata.push_back(std::to_string(data.counter) + ' ');
+
 }
 void EcatImu::DataWrite(uint8_t *domain1_pd_)
 {

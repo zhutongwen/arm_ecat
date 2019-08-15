@@ -1,0 +1,1 @@
+/usr/bin/arm-linux-gnueabihf-g++  -std=c++11 -pthread -static  -rdynamic CMakeFiles/UDPclint.dir/UDPclientWithConnect.cpp.o  -o ../../bin/UDPclint 

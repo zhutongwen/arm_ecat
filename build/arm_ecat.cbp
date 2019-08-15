@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="arm_ecat"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\src\;CMake Files\src\socket\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="arm_ecat">
+				<Option output="/home/xw/am437/nfs/arm-ecat/build/bin/arm_ecat" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/.."/>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/include"/>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/socket"/>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/etherlab"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 arm_ecat"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="arm_ecat/fast">
+				<Option output="/home/xw/am437/nfs/arm-ecat/build/bin/arm_ecat" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/.."/>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/include"/>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/socket"/>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/etherlab"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 arm_ecat/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="clint">
+				<Option output="/home/xw/am437/nfs/arm-ecat/build/bin/clint" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/socket/."/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clint"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="clint/fast">
+				<Option output="/home/xw/am437/nfs/arm-ecat/build/bin/clint" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/socket/."/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clint/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server">
+				<Option output="/home/xw/am437/nfs/arm-ecat/build/bin/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/socket/."/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 server"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server/fast">
+				<Option output="/home/xw/am437/nfs/arm-ecat/build/bin/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/xw/am437/nfs/arm-ecat/build/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/xw/am437/nfs/arm-ecat/src/socket/."/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 server/fast"/>
+					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j12 -f &quot;/home/xw/am437/nfs/arm-ecat/build/src/socket/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_imu.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_imu.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_main.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_master.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_master.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_motor.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_motor.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_shidian_io.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_shidian_io.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_slave.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_slave.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_syckin_io.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_syckin_io.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_task.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_task.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_wmadc.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_wmadc.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_wmio.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/ecat_wmio.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/rt_log.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/etherlab/rt_log.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/client.cpp">
+			<Option target="clint"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/server.cpp">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcp_thread.cpp">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcp_thread.h">
+			<Option target="arm_ecat"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcpacceptor.cpp">
+			<Option target="arm_ecat"/>
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcpacceptor.h">
+			<Option target="arm_ecat"/>
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcpconnector.cpp">
+			<Option target="clint"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcpconnector.h">
+			<Option target="clint"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcpstream.cpp">
+			<Option target="arm_ecat"/>
+			<Option target="clint"/>
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/tcpstream.h">
+			<Option target="arm_ecat"/>
+			<Option target="clint"/>
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/home/xw/am437/nfs/arm-ecat/src/socket/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\socket\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

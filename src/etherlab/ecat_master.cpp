@@ -53,11 +53,12 @@ void LoopTest(void)
 
 EcatMaster::EcatMaster(void)
 {
-
+    m_state = -1;
 }
 
 void EcatMaster::Init(void)
 {
+
     RT_PRINT("Requesting master...");
     master = ecrt_request_master(0);
     if (!master)
@@ -134,40 +135,12 @@ void EcatMaster::Init(void)
         RT_PRINT("PDO entry registration failed!!!");
     }
 
-    #ifdef MOTOR_Pos_0
-         ecrt_slave_config_dc(slaves.motor[0].sc_motor, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-    #ifdef MOTOR_Pos_1
-         ecrt_slave_config_dc(slaves.motor[1].sc_motor, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-    #ifdef MOTOR_Pos_2
-         ecrt_slave_config_dc(slaves.motor[2].sc_motor, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-    #ifdef MOTOR_Pos_3
-         ecrt_slave_config_dc(slaves.motor[3].sc_motor, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-    #ifdef MOTOR_Pos_4
-         ecrt_slave_config_dc(slaves.motor[4].sc_motor, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-    #ifdef MOTOR_Pos_5
-         ecrt_slave_config_dc(slaves.motor[5].sc_motor, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-
-    #ifdef WMIO_Pos_0
-        ecrt_slave_config_dc(slaves.wmio_0.sc_io, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-
-    #ifdef WMADC_Pos_0
-        ecrt_slave_config_dc(slaves.wmadc_0.sc, 0x0300, 1000000, 440000, 0, 0);
-    #endif
-
-    #ifdef SYCKIN_Pos_0
-        ecrt_slave_config_dc(slaves.SycKin_0.sc, 0x0300, 500000, 220000, 0, 0);
-    #endif
-    #ifdef SHIDIAN_Pos_0
-//        ecrt_slave_config_dc(slaves.ShiDian_0.sc, 0x0300, 500000, 220000, 0, 0);
-    #endif
-
+//    #ifdef MOTOR_Pos_0
+//         ecrt_slave_config_dc(slaves.motor_0.sc_motor, 0x0300, 1000000, 440000, 0, 0);
+//    #endif
+//    #ifdef MOTOR_Pos_1
+//         ecrt_slave_config_dc(slaves.motor_1.sc_motor, 0x0300, 1000000, 440000, 0, 0);
+//    #endif
 
     RT_PRINT("Activating master...");
     if (ecrt_master_activate(master))
@@ -186,6 +159,7 @@ void EcatMaster::Init(void)
     {
         RT_PRINT("ecrt_master error!!!");
     }
+    RT_PRINT("EcatMaster::Init completed");
 }
 
 EcatMaster::~EcatMaster(void)

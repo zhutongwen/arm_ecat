@@ -32,51 +32,22 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
-    {
-        printf("usage: %s <port> <ip>\n", argv[0]);
-        exit(1);
-    }
+//    if (argc != 3)
+//    {
+//        printf("usage: %s <port> <ip>\n", argv[0]);
+//        exit(1);
+//    }
 
-    int len;
     string message;
-    char line[256];
     TCPConnector* connector = new TCPConnector();
-    TCPStream* stream = connector->connect(argv[2], atoi(argv[1]));
+//    TCPStream* stream = connector->connect(argv[2], atoi(argv[1]));
+    TCPStream* stream = connector->connect("127.0.0.1", 8888);
 
 
-    struct timespec systime;
-    message = 1;
-    while (stream)
+    message = "dsds";
+    if (stream)
     {
-
-        clock_gettime(CLOCK_REALTIME, &systime);
-        std::cout << "time in: " << systime.tv_sec << "." << systime.tv_nsec << std::endl;
-
-
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-        stream->send(message.c_str(), message.size());
-
-//        printf("sent - %s\n", message.c_str());
-//        len = stream->receive(line, sizeof(line));
-//        line[len] = 0;
-//        printf("received - %s\n", line);
-
-        clock_gettime(CLOCK_REALTIME, &systime);
-         std::cout << "time out: " << systime.tv_sec << "." << systime.tv_nsec << std::endl << std::endl;
-
-
-
-//        delete stream;
+        stream->send(argv[1]);
     }
     exit(0);
 }

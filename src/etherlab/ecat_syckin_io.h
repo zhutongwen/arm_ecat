@@ -13,6 +13,7 @@ public:
     {
         unsigned int u16Dis;
         unsigned int u16DoStatus;
+        unsigned int u16DOOpen;
         unsigned int u16DoEns;
         unsigned int u16Dos;
     }offset_t;
@@ -21,6 +22,7 @@ public:
     {
         uint16_t u16Dis;
         uint16_t u16DoStatus;
+        uint16_t u16DOOpen;
         uint16_t u16DoEns;
         uint16_t u16Dos;
     }data_t;
@@ -34,9 +36,10 @@ public:
     ec_pdo_entry_info_t txpdo_entries[7] = {
         {0x6000, 0x01, 16}, /* u16Dis */
         {0x6000, 0x02, 16}, /* u16DoStatus */
+        {0x6000, 0x03, 16},
     };
     ec_pdo_info_t txpdos[1] = {
-        {0x1a00, 2, txpdo_entries + 0}, /* TxPdo Channel 1 */
+        {0x1a00, 3, txpdo_entries + 0}, /* TxPdo Channel 1 */
     };
     //RxPdo
     ec_pdo_entry_info_t rxpdo_entries[2] = {
@@ -66,8 +69,7 @@ public:
     ~EcatSycKinIO();
 
 private:
-
-    #define SYCKIN_IO             0x51409102, 0x92521401
+    #define SYCKIN_IO             0x51409102, 0x20190614
 //    volatile unsigned int test;
 };
 

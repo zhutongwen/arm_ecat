@@ -4,59 +4,82 @@ std::string space = " ";
 
 std::vector<std::string> vLogdata;
 std::vector<std::string> vPrintdata;
+
+
+
+uint32_t log_write_counter = 0;
+uint32_t log_read_cunter = 0;
+log_data_t log_data[LOG_BUFF];
+
+uint32_t printf_write_counter = 0;
+uint32_t printf_read_cunter = 0;
+std::string print_data[PRINT_BUFF];
+
 void *RTPrintThread(void *data)
 {
-    static std::ofstream RT_print_file;
-    static std::ofstream RT_log_file;
 
-    RT_print_file.close();
-    RT_log_file.close();
+    std::ofstream rt_print_file;
+    std::ofstream rt_log_file;
 
-    //RT_print_file.open("/tmp/log_file.txt", std::ios::out | std::ios::trunc);
-    RT_print_file.open("./RT_print_file.txt", std::ios::out | std::ios::trunc);
+    rt_print_file.close();
+    rt_log_file.close();
 
-    //log_file.open("/tmp/log_file.txt", std::ios::out | std::ios::trunc);
-    RT_log_file.open("./RT_log_file.txt", std::ios::out | std::ios::trunc);
+    rt_print_file.open("/tmp/print_file.txt", std::ios::out | std::ios::trunc);
+//    rt_print_file.open("./print_file.txt", std::ios::out | std::ios::trunc);
 
-    if(!RT_print_file.is_open())
+    rt_log_file.open("/tmp/log_file.txt", std::ios::out | std::ios::trunc);
+//    rt_log_file.open("./log_file.txt", std::ios::out | std::ios::trunc);
+
+    if(!rt_print_file.is_open())
     {
         std::cout << "start RTPrintThread error!!!" << std::endl;
         return 0;
     }
 
-    if(!RT_log_file.is_open())
+    if(!rt_log_file.is_open())
     {
         std::cout << "start RTLogThread error!!!" << std::endl;
         return 0;
     }
+
     {
         std::cout << "start RTPrintThread..." << std::endl;
         std::cout << "start RTLogThread..." << std::endl;
         while(1)
         {
-            uint32_t u32PrintSize = vPrintdata.size();
-            if(u32PrintSize)
+            //rtprintf
+            while(printf_read_cunter < printf_write_counter)
             {
-                for(uint32_t i=0; i< u32PrintSize; i++)
-                {
-                    std::cout << vPrintdata.at(i);
-                    RT_print_file << vPrintdata.at(i);
-                }
-                vPrintdata.erase(vPrintdata.begin(), vPrintdata.begin()+u32PrintSize);
-                RT_print_file.flush();
+                rt_print_file << print_data[printf_read_cunter % PRINT_BUFF];
+                std::cout << print_data[printf_read_cunter % PRINT_BUFF];
+                printf_read_cunter++;
             }
-
-            uint32_t u32logsize = vLogdata.size();
-            if(u32logsize)
+            //log
+            while(log_write_counter > log_read_cunter)
             {
-                for(uint32_t i=0; i< u32logsize; i++)
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].counter << ' ';
+                for(int i=0; i<6; i++)
                 {
-                    RT_log_file << vLogdata.at(i);
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].target_pos << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].actual_pos << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].target_vel << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].actual_vel << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].actual_cur << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].mode_display << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].status_word << ' ';
+                    rt_log_file << log_data[log_read_cunter % LOG_BUFF].motor[i].error_code << ' ';
                 }
-                vLogdata.erase(vLogdata.begin(), vLogdata.begin()+u32logsize);
-                RT_log_file.flush();
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.gx << ' ';
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.gy << ' ';
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.gz << ' ';
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.ax << ' ';
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.ay << ' ';
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.az << ' ';
+                rt_log_file << log_data[log_read_cunter % LOG_BUFF].imu.counter;
+                log_read_cunter++;
+                rt_log_file << std::endl;
             }
-            sleep(1);
+            usleep(10000);
         }
     }
 }

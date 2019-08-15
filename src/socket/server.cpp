@@ -21,6 +21,7 @@
    limitations under the License.
 */
 
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include "tcpacceptor.h"
@@ -52,10 +53,13 @@ int main(int argc, char** argv)
             {
                 ssize_t len;
                 char line[256];
+                string receive_data;
                 while ((len = stream->receive(line, sizeof(line))) > 0)
                 {
                     line[len] = 0;
-                    printf("received - %s\n", line);
+                    receive_data = line;
+                    std::cout << receive_data <<std::endl;
+//                    printf("received - %s\n", line);
 //                    stream->send(line, len);
                 }
                 delete stream;

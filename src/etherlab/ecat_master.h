@@ -28,20 +28,13 @@
 
 #define PI  3.141592654
 
-
-//#define IMU_Pos_1       0, 1
-
-
-//#define IMU_Pos_1       0, 1
-
-
+#define NUM_OF_MOTOR      6
 #define MOTOR_Pos_0       0, 0
 #define MOTOR_Pos_1       0, 1
 #define MOTOR_Pos_2       0, 2
 #define MOTOR_Pos_3       0, 3
 #define MOTOR_Pos_4       0, 4
 #define MOTOR_Pos_5       0, 5
-
 #define IMU_Pos_0         0, 6
 
 //#define IMU_Pos_1         0, 3
@@ -70,9 +63,17 @@ typedef struct
 
 
 
+//#ifdef MOTOR_Pos_0
+//    EcatMotor motor[NUM_OF_MOTOR];
+//#endif
+
 #ifdef MOTOR_Pos_0
     EcatMotor motor[6];
 #endif
+
+//#ifdef MOTOR_Pos_1
+//    EcatMotor motor_1;
+//#endif
 
 #ifdef IMU_Pos_0
     EcatImu imu_0;
@@ -101,9 +102,9 @@ typedef struct
 
 }slaves_t;
 
-extern slaves_t slaves;
 
-void LoopTest(void);
+
+
 
 
 class EcatMaster
@@ -115,8 +116,12 @@ public:
 
     uint8_t *domain1_pd = NULL;
 
+    volatile int m_state;
     slaves_t slaves;
     uint32_t u32GlobalCounter = 0;
+
+
+    std::vector<std::string> cmd;
 
 
     EcatMaster();
@@ -131,4 +136,8 @@ private:
 
 
 };
+
+
+extern EcatMaster  EMaster;
+
 #endif

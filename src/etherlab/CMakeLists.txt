@@ -19,23 +19,22 @@ INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}/include/")
 #add_executable(sensor_force sensor_force.cpp )
 
 
-add_executable(arm_ecat
-                        ecat_main.cpp
-                        ecat_master.cpp
-                        ecat_imu.cpp
-                        ecat_wmio.cpp
-                        ecat_slave.cpp
-                        ecat_motor.cpp
-                        ecat_task.cpp
-                        rt_log.cpp
-                        ecat_syckin_io.cpp
-                        ecat_shidian_io.cpp
-                        ecat_wmadc.cpp
+#add_executable(arm_ecat
+#                        tcpstream.cpp
+#                        tcpacceptor.cpp
 
-#                        ecat_force.cpp
-#                        record.cpp
-#                        "${PROJECT_SOURCE_DIR}/src/tinyxml2/tinyxml2.cpp"
-               )
+#                        ecat_main.cpp
+#                        ecat_master.cpp
+#                        ecat_imu.cpp
+#                        ecat_wmio.cpp
+#                        ecat_slave.cpp
+#                        ecat_motor.cpp
+#                        ecat_task.cpp
+#                        rt_log.cpp
+#                        ecat_syckin_io.cpp
+#                        ecat_shidian_io.cpp
+#                        ecat_wmadc.cpp
+#               )
 
 
 

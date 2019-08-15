@@ -15,14 +15,15 @@
 
 #include "ecat_master.h"
 #include "ecat_task.h"
+#include <tcp_thread.h>
 
 //uint: us
 #define LOOP_PERIOD 1000
 
 uint32_t loop_counter = 0;
-uint16_t min_time_us = LOOP_PERIOD;
-uint16_t max_time_us = LOOP_PERIOD;
-uint16_t last_time_us = 0;
+uint32_t min_time_us = LOOP_PERIOD;
+uint32_t max_time_us = LOOP_PERIOD;
+uint32_t last_time_us = 0;
 
 EcatMaster  EMaster;
 
@@ -62,46 +63,46 @@ void *thread_func(void *data)
                 goto out_loop;
             }
 
-            {
-                static uint32_t i=0;
-                //if(i++ < 10000) last_time_us = min_time_us;
-                if(EMaster.master_state.al_states != 0x08) last_time_us = LOOP_PERIOD;
-                else last_time_us = 1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
-                min_time_us = min_time_us > last_time_us?   last_time_us:min_time_us;
-                max_time_us = max_time_us < last_time_us?   last_time_us:max_time_us;
-                lasttime = systime;
-            }
+
         }
 
 
         // receive EtherCAT frames
         ecrt_master_receive(EMaster.master);
         ecrt_domain_process(EMaster.domain1);
-
         //
+        static int i=0;
+
         EMaster.rt_check_domain_state();
         EMaster.rt_check_master_state();
+
+
 
         static int is_link = 0;
         if(EMaster.master_state.al_states == 0x08) is_link = 1;
 
 
-        if(is_link)
+//        if(is_link)
         {
-            ControlTask(EMaster.domain1_pd, EMaster.slaves);
-
-            if(EMaster.master_state.al_states != 0x08)
+//            if(++i > 4000)
             {
-                std::cout << "error" << std::endl;
-                break;
+                i=4000;
+                ControlTask(EMaster.domain1_pd, EMaster.slaves);
             }
+
+
+//            if(EMaster.master_state.al_states != 0x08)
+//            {
+//                std::cout << "error" << std::endl;
+//                break;
+//            }
         }
 
         //distribute clock
         #if (1)
         {
             ecrt_master_application_time(EMaster.master, 1000000000*((uint64_t)systime.tv_sec) + systime.tv_nsec);
-            //ecrt_master_application_time(master, systime.tv_nsec);
+//            ecrt_master_application_time(EMaster.master, systime.tv_nsec);
             ecrt_master_sync_reference_clock(EMaster.master);
             ecrt_master_sync_slave_clocks(EMaster.master);
         }
@@ -110,6 +111,17 @@ void *thread_func(void *data)
         // send process data
         ecrt_domain_queue(EMaster.domain1);
         ecrt_master_send(EMaster.master);
+
+
+        {
+            static uint32_t i=0;
+            if(EMaster.master_state.al_states != 0x08) last_time_us = LOOP_PERIOD;
+            else if ( i < 2000) {i++; last_time_us = LOOP_PERIOD;}
+            else last_time_us = 1000000*(systime.tv_sec - lasttime.tv_sec) + (systime.tv_nsec - lasttime.tv_nsec)/1000;
+            min_time_us = min_time_us > last_time_us?   last_time_us:min_time_us;
+            max_time_us = max_time_us < last_time_us?   last_time_us:max_time_us;
+            lasttime = systime;
+        }
     }
 
 out_loop:
@@ -131,6 +143,18 @@ int main(int argc, char* argv[])
         goto out;
     }
     if (pthread_detach(thread_print))
+    {
+        printf("join pthread failed: %m\n");
+        goto out;
+    }
+
+    pthread_t thread_tcp;
+    if (pthread_create(&thread_tcp, NULL, TcpThread, NULL))
+    {
+        printf("create pthread failed\n");
+        goto out;
+    }
+    if (pthread_detach(thread_tcp))
     {
         printf("join pthread failed: %m\n");
         goto out;
@@ -167,7 +191,7 @@ int main(int argc, char* argv[])
 
     //ethercat loop
     {
-        param.sched_priority = 99;
+        param.sched_priority = 98;
         ret = pthread_attr_setschedparam(&attr, &param);
         if (ret) {
                 printf("pthread setschedparam failed\n");
@@ -189,18 +213,30 @@ int main(int argc, char* argv[])
         ret = pthread_detach(thread);
         if (ret)    printf("join pthread failed: %m\n");
     }
-
     while (1)
     {
         sleep(1);
+//        RT_PRINT("--");
         RT_PRINT("cycle times: " + std::to_string(loop_counter));
 //        RT_PRINT("last_time_us: " + std::to_string(last_time_us));
-        RT_PRINT("min_time_us: " + std::to_string(min_time_us));
-        RT_PRINT("max_time_us: " + std::to_string(max_time_us));
-
+//        RT_PRINT("min_time_us: " + std::to_string(min_time_us));
+//        RT_PRINT("max_time_us: " + std::to_string(max_time_us));
+//        RT_PRINT("m_state: " + std::to_string(EMaster.m_state));
+//        RT_PRINT("motor_0 motor_state: " + std::to_string(EMaster.slaves.motor_0.motor_state));
+//        RT_PRINT("motor_0 error code: " + std::to_string(EMaster.slaves.motor_0.data.error_code));
+//        RT_PRINT("motor_1 motor_state: " + std::to_string(EMaster.slaves.motor_1.motor_state));
 //        EMaster.slaves.imu_0.DataPlay();
-        std::cout<< std::endl;
 
+//        #ifdef  NUM_OF_MOTOR
+//        RT_PRINT("EMaster.m_state: " + std::to_string(EMaster.m_state));
+//        for(int i=0; i<NUM_OF_MOTOR; i++)
+//        {
+//            RT_PRINT("--");
+//            EMaster.slaves.motor[i].Display();
+//        }
+//        RT_PRINT("--");
+//        EMaster.slaves.imu_0.DataPlay();
+//        #endif
     }
 
     std::cout <<"End of Program"<<std::endl;

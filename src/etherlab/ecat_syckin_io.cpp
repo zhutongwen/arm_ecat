@@ -17,9 +17,9 @@ EcatSycKinIO::~EcatSycKinIO()
 
 }
 
-int EcatSycKinIO::Init   (ec_master_t    *master_,
-                    uint16_t        alias_, /**< Slave alias. */
-                    uint16_t        position_)
+int EcatSycKinIO::Init( ec_master_t    *master_,
+                        uint16_t        alias_, /**< Slave alias. */
+                        uint16_t        position_)
 {
     sc = ecrt_master_slave_config(master_, alias_, position_, SYCKIN_IO);
     if(NULL == sc)
@@ -36,6 +36,7 @@ int EcatSycKinIO::Init   (ec_master_t    *master_,
     EcatSlave::domain_regs.pop_back(); //删除a向量的最后一个元素
     EcatSlave::domain_regs.push_back({alias_, position_, SYCKIN_IO, 0x6000, 0x01, &offset.u16Dis, NULL});
     EcatSlave::domain_regs.push_back({alias_, position_, SYCKIN_IO, 0x6000, 0x02, &offset.u16DoStatus, NULL});
+    EcatSlave::domain_regs.push_back({alias_, position_, SYCKIN_IO, 0x6000, 0x03, &offset.u16DOOpen, NULL});
     EcatSlave::domain_regs.push_back({alias_, position_, SYCKIN_IO, 0x7000, 0x01, &offset.u16Dos, NULL});
     EcatSlave::domain_regs.push_back({alias_, position_, SYCKIN_IO, 0x7000, 0x02, &offset.u16DoEns, NULL});
     EcatSlave::domain_regs.push_back({});
@@ -48,6 +49,7 @@ void EcatSycKinIO::DataRead(uint8_t *domain1_pd_)
     // read process data
     data.u16Dis = EC_READ_U16(domain1_pd_ + offset.u16Dis);
     data.u16DoStatus = EC_READ_U16(domain1_pd_ + offset.u16DoStatus);
+    data.u16DOOpen = EC_READ_U16(domain1_pd_ + offset.u16DOOpen);
 }
 void EcatSycKinIO::DataWrite(uint8_t *domain1_pd_)
 {

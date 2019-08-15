@@ -1,0 +1,9 @@
+/home/xw/am437/nfs/arm-ecat/build/CMakeFiles/rebuild_cache.dir
+/home/xw/am437/nfs/arm-ecat/build/CMakeFiles/edit_cache.dir
+/home/xw/am437/nfs/arm-ecat/build/src/CMakeFiles/rebuild_cache.dir
+/home/xw/am437/nfs/arm-ecat/build/src/CMakeFiles/arm_ecat.dir
+/home/xw/am437/nfs/arm-ecat/build/src/CMakeFiles/edit_cache.dir
+/home/xw/am437/nfs/arm-ecat/build/src/socket/CMakeFiles/edit_cache.dir
+/home/xw/am437/nfs/arm-ecat/build/src/socket/CMakeFiles/clint.dir
+/home/xw/am437/nfs/arm-ecat/build/src/socket/CMakeFiles/rebuild_cache.dir
+/home/xw/am437/nfs/arm-ecat/build/src/socket/CMakeFiles/server.dir
